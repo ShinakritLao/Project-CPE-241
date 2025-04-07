@@ -14,10 +14,11 @@ from Page_1.kpidata import get_kpidata
 from Page_1.debtordata import get_debtordata
 from Page_1.productdata import get_productdata
 
+# LocalHost need to check before use
 conn = psycopg2.connect(
-    dbname="your_dbname",
-    user="your_username",
-    password="your_password",
+    dbname="Project-CPE241",
+    user="postgres",
+    password="nongshin",
     host="localhost",
     port="5432"
 )
