@@ -1,4 +1,4 @@
-# When are we gonna be free
+# When are we gonna be free <3
 import streamlit as st
 import pandas as pd
 import numpy as np
