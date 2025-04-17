@@ -16,10 +16,10 @@ from Page_1.productdata import get_productdata
 
 # LocalHost need to check before use
 conn = psycopg2.connect(
-    dbname="Project-CPE241",
-    user="postgres",
-    password="nongshin",
-    host="localhost",
+    dbname="postgres",
+    user="postgres.dawmfltwbrcjmlgmjoak",
+    password="!Mental241",
+    host="aws-0-ap-southeast-1.pooler.supabase.com",
     port="5432"
 )
 
