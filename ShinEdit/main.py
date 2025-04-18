@@ -25,21 +25,59 @@ conn = psycopg2.connect(
 
 cur = conn.cursor()
 
+# Login credentials
+USER_CREDENTIALS = {
+    "admin": "admin123",
+    "salesuser": "sales2025"
+}
+
 # Function to format numbers with commas
 def format_number(value):
     return f'{value:,}'
+
+# Login page
+def login():
+    if "logged_in" not in st.session_state:
+        st.session_state.logged_in = False
+
+    if not st.session_state.logged_in:
+        with st.form("Login Form"):
+            st.subheader("Please log in")
+            username = st.text_input("Username")
+            password = st.text_input("Password", type="password")
+            submit = st.form_submit_button("Login")
+
+            if submit:
+                if username in USER_CREDENTIALS and USER_CREDENTIALS[username] == password:
+                    st.session_state.logged_in = True
+                    st.success("Login successful!")
+                    st.rerun()
+                else:
+                    st.error("Incorrect username or password.")
 
 # Main function set up Streamlit
 def main():
     # SetUp wide mode
     st.set_page_config(layout="wide")
 
-    # Create tabs
-    Sales_Dashboard, Sales_CRUD = st.tabs(["Sales Dashboard", "Sales CRUD"])
+    # Run login first
+    login()
+
+    # If not logged in, stop everything
+    if not st.session_state.logged_in:
+        st.stop()
+
+    # Sidebar Logout button
+    if st.sidebar.button("Logout"):
+        st.session_state.logged_in = False
+        st.rerun()
 
     # Load Dropdown
     salesperson = get_salesperson(cur)
     salesyear = get_salesyear(cur)
+
+    # Create tabs
+    Sales_Dashboard, Sales_CRUD = st.tabs(["Sales Dashboard", "Sales CRUD"])
 
     with Sales_Dashboard:
         # Create dropdowns for Sales Name and Year
@@ -139,7 +177,6 @@ def main():
             # Filter debtor data based on dropdown for col3
             debtor_data = get_debtordata(cur, DropdownSalesName, DropdownYears)
             filtered_debtor_data = debtor_data
-
             with col3:
                 st.subheader("Debtors")
                 st.dataframe(filtered_debtor_data.reset_index(drop=True))
@@ -178,6 +215,7 @@ def main():
             ])
             new_amount = st.number_input("Sales Amount", min_value=0)
             submitted = st.form_submit_button("Add Sale")
+
             if submitted:
                 try:
                     cur.execute(
@@ -194,7 +232,6 @@ def main():
         # Select a row to update or delete
         st.subheader("Update / Delete Sale Record")
         selected_sale_id = st.selectbox("Select Sale ID", all_sales_data["salesid"].tolist())
-
         selected_data = all_sales_data[all_sales_data["salesid"] == selected_sale_id].iloc[0]
         new_amount = st.number_input("New Sales Amount", value=selected_data["sales"], min_value=0)
 
@@ -216,7 +253,6 @@ def main():
                     st.warning("Record deleted successfully!")
                 except Exception as e:
                     st.error(f"Delete failed: {e}")
-
 
 # Run main function
 if __name__ == "__main__":
