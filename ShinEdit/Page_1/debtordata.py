@@ -10,7 +10,7 @@ def get_debtordata(cursor, salename, year):
     result = cursor.fetchall()
 
     # Convert the result to a pandas DataFrame
-    debtordata = pd.DataFrame(result, columns=['DebtorID', 'Company Name', 'SalesID', 'ProductID', 'Price', 'Debt', 'Paid', 'Date', 'Status'])
+    debtordata = pd.DataFrame(result, columns=['DebtorID', 'Company Name', 'SalesPersonID', 'ProductID', 'Price', 'Debt', 'Paid', 'Date', 'Status'])
 
     # Convert the 'Year' column to integer type
     debtordata['Price'] = debtordata['Price'].astype(int)

@@ -1,7 +1,7 @@
 def get_salesperson(cursor):
     (cursor.execute
     ("""
-        SELECT DISTINCT salesid FROM salesperson;
+        SELECT DISTINCT salespersonid FROM salesperson;
     """))
 
     result = cursor.fetchall()

@@ -10,7 +10,7 @@ def get_kpidata(cursor, salename, year):
     result = cursor.fetchall()
 
     # Convert the result to a pandas DataFrame
-    kpidata = pd.DataFrame(result, columns=['KPI_ID','SalesID', 'Year', 'TargetQ', 'Quotation', 'TargetSO', 'SaleOrder', 'AllCustomer', 'CustomerHand'])
+    kpidata = pd.DataFrame(result, columns=['KPI_ID','SalesPersonID', 'Year', 'TargetQ', 'Quotation', 'TargetSO', 'SaleOrder', 'AllCustomer', 'CustomerHand'])
 
     # Convert the 'Year' column to integer type
     kpidata['Year'] = kpidata['Year'].astype(int)
