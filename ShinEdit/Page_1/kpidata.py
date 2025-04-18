@@ -3,14 +3,14 @@ def get_kpidata(cursor, salename, year):
     # Execute the SQL query with swapped columns
     (cursor.execute
     (f"""
-        sql
+        SELECT * FROM KPI;
     """))
 
     # Fetch all results from the executed query
     result = cursor.fetchall()
 
     # Convert the result to a pandas DataFrame
-    kpidata = pd.DataFrame(result, columns=['Sales Name', 'Year', 'TargetQ', 'Quotation', 'TargetSO', 'SaleOrder', 'AllCustomer', 'CustomerHand'])
+    kpidata = pd.DataFrame(result, columns=['KPI_ID','SalesID', 'Year', 'TargetQ', 'Quotation', 'TargetSO', 'SaleOrder', 'AllCustomer', 'CustomerHand'])
 
     # Convert the 'Year' column to integer type
     kpidata['Year'] = kpidata['Year'].astype(int)

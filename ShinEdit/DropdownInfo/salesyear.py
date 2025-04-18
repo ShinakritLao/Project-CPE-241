@@ -1,7 +1,7 @@
 def get_salesyear(cursor):
     (cursor.execute
      ("""
-        sql
+        SELECT year FROM sales;
      """))
 
     result = cursor.fetchall()
