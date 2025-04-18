@@ -70,7 +70,7 @@ def main():
     # Sidebar Logout button
     if st.sidebar.button("Logout"):
         st.session_state.logged_in = False
-        st.experimental_rerun()
+        st.rerun()
 
     # Load Dropdown
     salesperson = get_salesperson(cur)
