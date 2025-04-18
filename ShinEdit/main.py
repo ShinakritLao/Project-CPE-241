@@ -233,7 +233,7 @@ def main():
         # Select a row to update or delete
         st.subheader("Update / Delete Sale Record")
         selected_data = st.selectbox("Select Sale", all_sales_data["salesid"].tolist())
-        new_amount = st.number_input("New Sales Amount", min_value=0)
+        new_amount = st.number_input("New Sales Amount", min_value = 0)
 
         col1, col2 = st.columns(2)
         with col1:
