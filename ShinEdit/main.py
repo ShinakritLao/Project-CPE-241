@@ -170,8 +170,8 @@ def main():
         st.subheader("Add New Sale Record")
         with st.form("Add Record"):
             new_sale_id = st.text_input("Sale ID")
-            new_salesperson = st.selectbox("Salesperson", salesperson[1:])  # Remove 'Sales Name'
-            new_year = st.selectbox("Year", salesyear[1:])  # Remove 'Years'
+            new_quantity = st.number_input("Number of product")
+            new_year = st.selectbox("Year", [2020, 2021, 2022, 2023, 2024, 2025])  # Remove 'Years'
             new_month = st.selectbox("Month", [
                 "January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"
@@ -181,8 +181,8 @@ def main():
             if submitted:
                 try:
                     cur.execute(
-                        "INSERT INTO sales (sale_id, salesperson, year, month, sales) VALUES (%s, %s, %s, %s, %s)",
-                        (new_sale_id, new_salesperson, new_year, new_month, new_amount)
+                        "INSERT INTO sales (salesid, numberofproduct, year, month, sales) VALUES (%s, %s, %s, %s, %s)",
+                        (new_sale_id, new_quantity, new_year, new_month, new_amount)
                     )
                     conn.commit()
                     st.success("New sale record added successfully!")
@@ -193,16 +193,16 @@ def main():
 
         # Select a row to update or delete
         st.subheader("Update / Delete Sale Record")
-        selected_sale_id = st.selectbox("Select Sale ID", all_sales_data["sale_id"].tolist())
+        selected_sale_id = st.selectbox("Select Sale ID", all_sales_data["salesid"].tolist())
 
-        selected_data = all_sales_data[all_sales_data["sale_id"] == selected_sale_id].iloc[0]
+        selected_data = all_sales_data[all_sales_data["salesid"] == selected_sale_id].iloc[0]
         new_amount = st.number_input("New Sales Amount", value=selected_data["sales"], min_value=0)
 
         col1, col2 = st.columns(2)
         with col1:
             if st.button("Update Record"):
                 try:
-                    cur.execute("UPDATE sales SET sales = %s WHERE sale_id = %s", (new_amount, selected_sale_id))
+                    cur.execute("UPDATE sales SET sales = %s WHERE salesid = %s", (new_amount, selected_sale_id))
                     conn.commit()
                     st.success("Record updated successfully!")
                 except Exception as e:
@@ -211,7 +211,7 @@ def main():
         with col2:
             if st.button("Delete Record"):
                 try:
-                    cur.execute("DELETE FROM sales WHERE sale_id = %s", (selected_sale_id,))
+                    cur.execute("DELETE FROM sales WHERE salesid = %s", (selected_sale_id,))
                     conn.commit()
                     st.warning("Record deleted successfully!")
                 except Exception as e:
