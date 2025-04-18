@@ -10,10 +10,10 @@ def get_salesdata(cursor, salename, year):
     result = cursor.fetchall()
 
     # Convert the result to a pandas DataFrame
-    salesdata = pd.DataFrame(result, columns=['SalesID', 'NumberOfProduct', 'Year', 'Month', 'Sales'])
+    salesdata = pd.DataFrame(result, columns=['SalesID', 'SalesPersonID', 'Quantity', 'Year', 'Month', 'Sales'])
 
     # Convert the 'year' column to integer type
-    salesdata['NumberOfProduct'] = salesdata['NumberOfProduct'].astype(int)
+    salesdata['Quantity'] = salesdata['Quantity'].astype(int)
     salesdata['Year'] = salesdata['Year'].astype(int)
     salesdata['Sales'] = salesdata['Sales'].astype(int)
 
