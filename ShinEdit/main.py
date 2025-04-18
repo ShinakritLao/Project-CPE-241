@@ -194,7 +194,7 @@ def main():
 
     with Sales_CRUD:
         st.header("Sales CRUD")
-        # test
+        #test
         st.subheader("Manage Sales Records")
 
         # Load existing sales data
@@ -203,6 +203,7 @@ def main():
 
         st.markdown("---")
 
+        # Form to add new record
         st.subheader("Add New Sale Record")
         with st.form("Add Record"):
             new_sale_id = st.text_input("Sale ID")
