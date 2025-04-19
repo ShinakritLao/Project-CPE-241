@@ -1,18 +1,15 @@
 import pandas as pd
-def get_kpidata(cursor, salename, year):
-    # Execute the SQL query with swapped columns
-    (cursor.execute
-    (f"""
-        SELECT * FROM KPI;
-    """))
 
-    # Fetch all results from the executed query
-    result = cursor.fetchall()
+def get_kpidata(cur):
+
+    # SQL part: Get data from the table in database
+    cur.execute("SELECT * FROM KPI;")
+    result = cur.fetchall()
 
     # Convert the result to a pandas DataFrame
-    kpidata = pd.DataFrame(result, columns=['KPI_ID','SalesPersonID', 'Year', 'TargetQ', 'Quotation', 'TargetSO', 'SaleOrder', 'AllCustomer', 'CustomerHand'])
+    kpidata = pd.DataFrame(result, columns = ['KPI_ID','SalesPersonID', 'Year', 'TargetQ', 'Quotation', 'TargetSO', 'SaleOrder', 'AllCustomer', 'CustomerHand'])
 
-    # Convert the 'Year' column to integer type
+    # Convert into integer type
     kpidata['Year'] = kpidata['Year'].astype(int)
     kpidata['TargetQ'] = kpidata['TargetQ'].astype(int)
     kpidata['Quotation'] = kpidata['Quotation'].astype(int)
