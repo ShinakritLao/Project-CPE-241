@@ -3,7 +3,7 @@ import pandas as pd
 def get_productdata(cur):
 
     # SQL part: Get data from the table in database
-    cur.execute("SELECT * FROM SalesProduct;")
+    cur.execute("SELECT * FROM SalesProduct ORDER BY SalesID;")
     result = cur.fetchall()
 
     # Convert the result to a pandas DataFrame

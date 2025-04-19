@@ -50,17 +50,17 @@ def main():
     # SetUp wide mode
     st.set_page_config(layout="wide")
 
-    # Run login first
-    login(users_data)
-
-    # If not logged in, stop everything
-    if not st.session_state.logged_in:
-        st.stop()
-
-    # Sidebar Logout button
-    if st.sidebar.button("Logout"):
-        st.session_state.logged_in = False
-        st.rerun()
+    # # Run login first
+    # login(users_data)
+    #
+    # # If not logged in, stop everything
+    # if not st.session_state.logged_in:
+    #     st.stop()
+    #
+    # # Sidebar Logout button
+    # if st.sidebar.button("Logout"):
+    #     st.session_state.logged_in = False
+    #     st.rerun()
 
     # Create tabs
     Sales_Dashboard_tab, Sales_CRUD_tab = st.tabs(["Sales Dashboard", "Sales CRUD"])
@@ -69,7 +69,7 @@ def main():
         dashboard(cur, conn, salesyear, salesperson, sales_data, product_data, salesperson_data, kpi_data, debtor_data, salesproduct_data)
 
     with Sales_CRUD_tab:
-        Sales_CRUD(cur, conn, salesperson)
+        Sales_CRUD(cur, conn, salesperson, sales_data)
 
 # Run main function
 if __name__ == "__main__": main()

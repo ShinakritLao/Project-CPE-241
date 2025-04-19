@@ -3,7 +3,7 @@ import pandas as pd
 def get_changehistorydata(cur):
 
     # SQL part: Get data from the table in database
-    cur.execute("SELECT * FROM Change_History;")
+    cur.execute("SELECT * FROM Change_History ORDER BY ChangeID;")
     result = cur.fetchall()
 
     # Convert the result to a pandas DataFrame

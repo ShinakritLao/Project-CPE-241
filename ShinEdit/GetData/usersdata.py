@@ -3,7 +3,7 @@ import pandas as pd
 def get_usersdata(cur):
 
     # SQL part: Get data from the table in database
-    cur.execute("SELECT * FROM Users;")
+    cur.execute("SELECT * FROM Users ORDER BY Username;")
     result = cur.fetchall()
 
     # Convert the result to a pandas DataFrame

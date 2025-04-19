@@ -10,8 +10,6 @@ def Sales_CRUD(cur, conn, salesperson, all_sales_data):
     # Load existing sales data
     st.dataframe(all_sales_data)
 
-    st.markdown("---")
-
     add_record, update_record, delete_record = st.tabs(['Add', 'Update', 'Delete'])
 
     # Add record
@@ -55,22 +53,36 @@ def Sales_CRUD(cur, conn, salesperson, all_sales_data):
         st.subheader("Update Sale Record")
 
         selected_update_data = st.selectbox("Select Sale", all_sales_data["SalesID"].tolist(), key="update_selectbox")
-        st.dataframe(all_sales_data[all_sales_data['SalesID'] == selected_update_data])
+        current_data = all_sales_data.loc[all_sales_data['SalesID'] == selected_update_data]
+        st.dataframe(current_data)
 
         with st.form("Update Record"):
 
-            update_salesperson = st.selectbox("Sales Person ID", salesperson)
-            update_quantity = st.number_input("Number of product")
-            update_year = st.selectbox("Year", [2023, 2024, 2025])
+            # Update form
+            update_salesperson = st.selectbox("Sales Person ID", salesperson, index = salesperson.index(current_data['SalesPersonID'].values[0]))
+            update_quantity = st.number_input("Number of product", value = current_data['Quantity'].values[0])
+            update_year = st.selectbox("Year", [2022, 2023, 2024, 2025], index = [2022, 2023, 2024, 2025].index(current_data['Year'].values[0]))
             update_month = st.selectbox("Month", [
                 "January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"
-            ])
-            new_amount = st.number_input("Sales Amount", min_value = 0)
+            ], index = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ].index(current_data['Month'].values[0]))
+            new_amount = st.number_input("Sales Amount", value = current_data['Sales'].values[0], min_value = 0)
 
             if st.form_submit_button("Update Record"):
                 try:
-                    cur.execute("UPDATE sales SET sales = %s WHERE salesid = %s", (new_amount, selected_update_data))
+                    if update_salesperson != current_data['SalesPersonID'].values[0]:
+                        cur.execute("UPDATE sales SET salespersonid = %s WHERE salesid = %s", (update_salesperson, selected_update_data))
+                    if update_quantity != current_data['Quantity'].values[0]:
+                        cur.execute("UPDATE sales SET quantity = %s WHERE salesid = %s", (update_quantity, selected_update_data))
+                    if update_year != current_data['Year'].values[0]:
+                        cur.execute("UPDATE sales SET year = %s WHERE salesid = %s", (update_year, selected_update_data))
+                    if update_month != current_data['Month'].values[0]:
+                        cur.execute("UPDATE sales SET month = %s WHERE salesid = %s", (update_month, selected_update_data))
+                    if new_amount != current_data['SalesPersonID'].values[0]:
+                        cur.execute("UPDATE sales SET sales = %s WHERE salesid = %s", (new_amount, selected_update_data))
                     conn.commit()
                     st.success("Record updated successfully!")
                 except Exception as e:

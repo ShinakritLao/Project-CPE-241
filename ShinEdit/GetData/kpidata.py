@@ -3,7 +3,7 @@ import pandas as pd
 def get_kpidata(cur):
 
     # SQL part: Get data from the table in database
-    cur.execute("SELECT * FROM KPI;")
+    cur.execute("SELECT * FROM KPI ORDER BY KPI_ID;")
     result = cur.fetchall()
 
     # Convert the result to a pandas DataFrame
