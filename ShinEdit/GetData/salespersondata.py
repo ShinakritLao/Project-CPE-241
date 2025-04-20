@@ -7,6 +7,6 @@ def get_salespersondata(cur):
     result = cur.fetchall()
 
     # Convert the result to a pandas DataFrame
-    salespersondata = pd.DataFrame(result, columns = ['SalesPersonID', 'SalesName'])
+    salespersondata = pd.DataFrame(result, columns = ['SalesPersonID', 'SalesName', 'DOB', 'Gender', 'Position', 'PhoneNumber'])
 
     return salespersondata
