@@ -43,7 +43,7 @@ changehistory_data = get_changehistorydata(cur)
 # Main function
 from Web_Page.login_page import login
 from Web_Page.dashboard_page import dashboard
-from Web_Page.CRUD_page import Sales_CRUD
+from Web_Page.sales_CRUD_page import Sales_CRUD
 
 # Main function set up Streamlit
 def main():
@@ -63,10 +63,10 @@ def main():
     #     st.rerun()
 
     # Create tabs
-    Sales_Dashboard_tab, Sales_CRUD_tab = st.tabs(["Sales Dashboard", "Sales CRUD"])
+    Sales_Dashboard_tab, Sales_CRUD_tab = st.tabs(["Sales Dashboard", "Sales"])
 
     with Sales_Dashboard_tab:
-        dashboard(cur, conn, salesyear, salesperson, sales_data, product_data, salesperson_data, kpi_data, debtor_data, salesproduct_data)
+        dashboard(salesyear, salesperson, sales_data, product_data, kpi_data, debtor_data)
 
     with Sales_CRUD_tab:
         Sales_CRUD(cur, conn, salesperson, sales_data)

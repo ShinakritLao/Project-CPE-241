@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import altair as alt
 
-def dashboard(cur, conn, salesyear, salesperson, sales_data, product_data, salesperson_data, kpi_data, debtor_data, salesproduct_data):
+def dashboard(salesyear, salesperson, sales_data, product_data, kpi_data, debtor_data):
     # Create dropdowns for Sales Name and Year
     col1, col2 = st.columns([1, 1])
     with col1:
