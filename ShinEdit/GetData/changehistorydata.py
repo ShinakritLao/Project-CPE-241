@@ -10,8 +10,4 @@ def get_changehistorydata(cur):
     changehistorydata = pd.DataFrame(result, columns = ['ChangeID', 'Username', 'Table', 'Location', 'SubLocation',
                                                         'Action', 'OriginalData', 'UpdatedData', 'Date', 'Time'])
 
-    # Convert into integer type
-    changehistorydata['Date'] = pd.to_datetime(changehistorydata['Date'], format = '%Y-%m-%d')
-    changehistorydata['Time'] = pd.to_datetime(changehistorydata['Time'], format = '%H:%M:%S')
-
     return changehistorydata

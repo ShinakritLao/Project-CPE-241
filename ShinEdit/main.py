@@ -40,10 +40,24 @@ salesproduct_data = get_salesproductdata(cur)
 users_data = get_usersdata(cur)
 changehistory_data = get_changehistorydata(cur)
 
+# Get display function
+from GetData.debtordata import get_display_debtor
+from GetData.kpidata import get_display_kpi
+from GetData.salesdata import get_display_sales
+from GetData.salesproductdata import get_display_salesproduct
+from GetData.usersdata import get_display_users
+
+display_debtor = get_display_debtor(cur)
+display_kpi = get_display_kpi(cur)
+display_sales = get_display_sales(cur)
+display_salesproduct = get_display_salesproduct(cur)
+display_users = get_display_users(cur)
+
 # Main function
 from Web_Page.login_page import login
 from Web_Page.dashboard_page import dashboard
 from Web_Page.sales_CRUD_page import Sales_CRUD
+from Web_Page.restoredata_page import restoredata_CRUD
 
 # Main function set up Streamlit
 def main():
@@ -63,13 +77,16 @@ def main():
     #     st.rerun()
 
     # Create tabs
-    Sales_Dashboard_tab, Sales_CRUD_tab = st.tabs(["Sales Dashboard", "Sales"])
+    Sales_Dashboard_tab, Sales_CRUD_tab, Restore_CRUD_tab = st.tabs(["Sales Dashboard", "Sales", "Restore Data"])
 
     with Sales_Dashboard_tab:
         dashboard(salesyear, salesperson, sales_data, product_data, kpi_data, debtor_data)
 
     with Sales_CRUD_tab:
-        Sales_CRUD(cur, conn, salesperson, sales_data)
+        Sales_CRUD(cur, conn, salesperson, sales_data, display_sales)
+
+    with Restore_CRUD_tab:
+        restoredata_CRUD(cur, conn, changehistory_data)
 
 # Run main function
 if __name__ == "__main__": main()

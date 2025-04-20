@@ -1,18 +1,16 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from Web_Page.changehistory_update import history_update
-from GetData.salesdata import get_display_sales
+from HistoryData.changehistory_update import history_update
 
 year = [2022, 2023, 2024, 2025]
 month = ["January", "February", "March", "April", "May", "June",
          "July", "August", "September", "October", "November", "December"]
 
-def Sales_CRUD(cur, conn, salesperson, all_sales_data):
+def Sales_CRUD(cur, conn, salesperson, all_sales_data, display_data):
     st.header("Sales Record")
 
     # Load existing sales data
-    display_data = get_display_sales(cur)
     st.dataframe(display_data)
 
     add_record, update_record, delete_record = st.tabs(['Add', 'Update', 'Delete'])
@@ -60,7 +58,7 @@ def Sales_CRUD(cur, conn, salesperson, all_sales_data):
 
                     st.success("New sale record added successfully!")
                 except Exception as e:
-                    st.error(f"Failed to insert record: {e}")
+                    st.error(f"Insert failed: {e}")
 
     # Update record
     with update_record:
@@ -101,7 +99,7 @@ def Sales_CRUD(cur, conn, salesperson, all_sales_data):
                                     (update_month, selected_update_data))
                         history_update(cur, conn, "Sales", selected_update_data, "Month",
                                        "Update", current_data['Month'].values[0], update_month)
-                    if new_amount != current_data['SalesPersonID'].values[0]:
+                    if new_amount != current_data['Sales'].values[0]:
                         cur.execute("UPDATE sales SET sales = %s WHERE salesid = %s",
                                     (new_amount, selected_update_data))
                         history_update(cur, conn, "Sales", selected_update_data, "Sales",

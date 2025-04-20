@@ -29,6 +29,6 @@ def get_display_debtor(cur):
 
     # Convert the result to a pandas DataFrame
     display_data = pd.DataFrame(display_sql, columns = ['Debtor ID', 'Company Name', 'Sales Person ID', 'Sales Name',
-                                                        'Product ID', 'Price', 'Debt', 'Paid', 'Date', 'Status'])
+                                                        'Product ID', 'Product Name', 'Price', 'Debt', 'Paid', 'Date', 'Status'])
 
     return display_data
