@@ -7,7 +7,8 @@ def get_kpidata(cur):
     result = cur.fetchall()
 
     # Convert the result to a pandas DataFrame
-    kpidata = pd.DataFrame(result, columns = ['KPI_ID','SalesPersonID', 'Year', 'TargetQ', 'Quotation', 'TargetSO', 'SaleOrder', 'AllCustomer', 'CustomerHand'])
+    kpidata = pd.DataFrame(result, columns = ['KPI_ID','SalesPersonID', 'Year', 'TargetQ', 'Quotation', 'TargetSO',
+                                              'SaleOrder', 'AllCustomer', 'CustomerHand'])
 
     # Convert into integer type
     kpidata['Year'] = kpidata['Year'].astype(int)
@@ -19,3 +20,20 @@ def get_kpidata(cur):
     kpidata['CustomerHand'] = kpidata['CustomerHand'].astype(int)
 
     return kpidata
+
+def get_display_kpi(cur):
+
+    # SQL part: Get data from the table in database
+    cur.execute("""
+            SELECT KPI_ID, KPI.SalesPersonID, SalesName, Year, TargetQ, Quotation, TargetSO, SalesOrder,
+            AllCustomer, CustomerInHand FROM KPI 
+            JOIN SalesPerson ON KPI.SalesPersonID = SalesPerson.SalesPersonID ORDER BY KPI_ID;
+            """)
+    display_sql = cur.fetchall()
+
+    # Convert the result to a pandas DataFrame
+    display_data = pd.DataFrame(display_sql, columns = ['KPI ID','Sales Person ID', 'Sales Name', 'Year',
+                                                        'Target Quotation', 'Quotation', 'Target Sales Order',
+                                                        'Sale Order', 'All Customer', 'Customer in Hand'])
+
+    return display_data

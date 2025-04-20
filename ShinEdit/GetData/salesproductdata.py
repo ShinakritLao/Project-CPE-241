@@ -14,3 +14,18 @@ def get_salesproductdata(cur):
     salesproduct['TotalCost'] = salesproduct['TotalCost'].astype(int)
 
     return salesproduct
+
+def get_display_salesproduct(cur):
+
+    # SQL part: Get data from the table in database
+    cur.execute("""
+            SELECT SalesID, Product.ProductID, ProductName, TotalSales, TotalCost, Status FROM SalesProduct
+            JOIN Product ON SalesProduct.ProductID = Product.ProductID ORDER BY SalesID, Product.ProductID;
+            """)
+    display_sql = cur.fetchall()
+
+    # Convert the result to a pandas DataFrame
+    display_data = pd.DataFrame(display_sql, columns = ['Sales ID', 'Product ID', 'Product Name', 'Total Sales',
+                                                        'Total Cost', 'Status'])
+
+    return display_data

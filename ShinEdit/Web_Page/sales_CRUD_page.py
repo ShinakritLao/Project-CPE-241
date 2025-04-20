@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from Web_Page.changehistory_update import history_update
+from GetData.salesdata import get_display_sales
 
 year = [2022, 2023, 2024, 2025]
 month = ["January", "February", "March", "April", "May", "June",
@@ -10,15 +11,8 @@ month = ["January", "February", "March", "April", "May", "June",
 def Sales_CRUD(cur, conn, salesperson, all_sales_data):
     st.header("Sales Record")
 
-    cur.execute("""
-        SELECT SalesID, Sales.SalesPersonID, SalesName, Quantity, Year, Month, Sales FROM Sales
-        JOIN SalesPerson ON Sales.SalesPersonID = SalesPerson.SalesPersonID ORDER BY SalesID;
-        """)
-    display_sql = cur.fetchall()
-    display_data = pd.DataFrame(display_sql, columns = ['Sales ID', 'Sales Person ID', 'Sales Name', 'Quantity',
-                                                        'Year', 'Month', 'Sales'])
-
     # Load existing sales data
+    display_data = get_display_sales(cur)
     st.dataframe(display_data)
 
     add_record, update_record, delete_record = st.tabs(['Add', 'Update', 'Delete'])

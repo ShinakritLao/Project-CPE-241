@@ -15,3 +15,18 @@ def get_salesdata(cur):
     salesdata['Sales'] = salesdata['Sales'].astype(int)
 
     return salesdata
+
+def get_display_sales(cur):
+
+    # SQL part: Get data from the table in database
+    cur.execute("""
+            SELECT SalesID, Sales.SalesPersonID, SalesName, Quantity, Year, Month, Sales FROM Sales
+            JOIN SalesPerson ON Sales.SalesPersonID = SalesPerson.SalesPersonID ORDER BY SalesID;
+            """)
+    display_sql = cur.fetchall()
+
+    # Convert the result to a pandas DataFrame
+    display_data = pd.DataFrame(display_sql, columns = ['Sales ID', 'Sales Person ID', 'Sales Name', 'Quantity',
+                                                      'Year', 'Month', 'Sales'])
+
+    return display_data
