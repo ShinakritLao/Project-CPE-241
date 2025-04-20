@@ -47,3 +47,9 @@ def restore_update(cur, conn, table, loc, subloc, current_value, new_value, chan
 
 #    # Save change in history table
 #      history_update(cur, conn, table, loc, "-", "Restore", "-", new_value)
+
+def clear_history(cur, conn):
+
+    # SQL part: Update data from the table in database
+    cur.execute(f"DELETE FROM history_change;")
+    conn.commit()
