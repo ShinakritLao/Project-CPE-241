@@ -1,3 +1,9 @@
+# Dont Delete Kao Jai Mai LingLing
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -80,7 +86,7 @@ def main():
     Sales_Dashboard_tab, Sales_CRUD_tab, Restore_CRUD_tab = st.tabs(["Sales Dashboard", "Sales", "Restore Data"])
 
     with Sales_Dashboard_tab:
-        dashboard(salesyear, salesperson, sales_data, product_data, kpi_data, debtor_data)
+        dashboard(salesyear, salesperson, cur)
 
     with Sales_CRUD_tab:
         Sales_CRUD(cur, conn, salesperson, sales_data, display_sales)
