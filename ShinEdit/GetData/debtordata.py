@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 def get_debtordata_dash(cur, salesperson, salesyear):
 
     # SQL part: Get data from the table in database
