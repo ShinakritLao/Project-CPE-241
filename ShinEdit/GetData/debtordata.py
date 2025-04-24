@@ -1,9 +1,10 @@
 import pandas as pd
 
+
 def get_debtordata_dash(cur, salesperson, salesyear):
 
     # SQL part: Get data from the table in database
-    cur.execute(f"SELECT * FROM Debtor WHERE salespersonid = '{salesperson}';")
+    cur.execute(f"SELECT * FROM Debtor WHERE salespersonid = '{salesperson}' AND EXTRACT(YEAR FROM date) = {salesyear};")
     result = cur.fetchall()
 
     # Convert the result to a pandas DataFrame
