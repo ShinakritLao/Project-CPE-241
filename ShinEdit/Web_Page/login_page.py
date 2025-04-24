@@ -4,8 +4,8 @@ import numpy as np
 
 def createuser(conn, username, salespersonid, password, nickname, email):
     cur = conn.cursor()
-    cur.execute("""INSERT INTO users (username,salespersonid, password, nickname, email) VALUES 
-                   (%s ,%s ,%s ,%s ,%s ,%s)""", (username,salespersonid, password, nickname, email))
+    cur.execute("INSERT INTO users (username,salespersonid, password, nickname, email) VALUES (%s,%s, %s, %s, %s)",
+        (username,salespersonid, password, nickname, email))
     conn.commit()
 
 def reset_password(conn, username, new_password):
