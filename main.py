@@ -70,12 +70,9 @@ def main():
     # SetUp wide mode
     st.set_page_config(layout="wide")
 
-    # # Run login first
-    # login(users_data)
-    #
-    # # If not logged in, stop everything
-    # if not st.session_state.logged_in:
-    #     st.stop()
+    login(users_data,conn)
+    if not st.session_state.logged_in:
+         st.stop()
     #
     # # Sidebar Logout button
     # if st.sidebar.button("Logout"):
@@ -86,7 +83,7 @@ def main():
     Sales_Dashboard_tab, Sales_CRUD_tab, Restore_CRUD_tab = st.tabs(["Sales Dashboard", "Sales", "Restore Data"])
 
     with Sales_Dashboard_tab:
-        dashboard(salesyear, salesperson, cur)
+        dashboard(salesyear, salesperson, conn)
 
     with Sales_CRUD_tab:
         Sales_CRUD(cur, conn, salesperson, sales_data, display_sales)

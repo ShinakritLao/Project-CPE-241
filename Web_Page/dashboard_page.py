@@ -6,10 +6,10 @@ import psycopg2
 
 def dashboard(salesyear, salesperson, cur):
     # For Dashboard
-    from ShinEdit.GetData.salesdata import get_salesdata_dash
-    from ShinEdit.GetData.kpidata import get_kpidata_dash
-    from ShinEdit.GetData.debtordata import get_debtordata_dash
-    from ShinEdit.GetData.productdata import get_productdata_dash
+    from GetData.salesdata import get_salesdata_dash
+    from GetData.kpidata import get_kpidata_dash
+    from GetData.debtordata import get_debtordata_dash
+    from GetData.productdata import get_productdata_dash
 
     # Create dropdowns for Sales Name and Year
     col1, col2 = st.columns([1, 1])
