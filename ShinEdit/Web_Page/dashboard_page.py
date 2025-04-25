@@ -2,8 +2,15 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import altair as alt
+import psycopg2
 
-def dashboard(salesyear, salesperson, sales_data, product_data, kpi_data, debtor_data):
+def dashboard(salesyear, salesperson, cur):
+    # For Dashboard
+    from ShinEdit.GetData.salesdata import get_salesdata_dash
+    from ShinEdit.GetData.kpidata import get_kpidata_dash
+    from ShinEdit.GetData.debtordata import get_debtordata_dash
+    from ShinEdit.GetData.productdata import get_productdata_dash
+
     # Create dropdowns for Sales Name and Year
     col1, col2 = st.columns([1, 1])
     with col1:
@@ -12,7 +19,7 @@ def dashboard(salesyear, salesperson, sales_data, product_data, kpi_data, debtor
         DropdownYears = st.selectbox("Select Years", salesyear)
 
     # Display header with selected Sales Name and Year
-    if DropdownSalesName != "Sales Name" and DropdownYears != "Years":
+    if DropdownSalesName != "Sales ID" and DropdownYears != "Year":
         st.header(f"({DropdownSalesName}, {DropdownYears})")
     else:
         st.header("SALES")
@@ -22,7 +29,8 @@ def dashboard(salesyear, salesperson, sales_data, product_data, kpi_data, debtor
     col3, col4 = st.columns(2)
 
     # Filter sales data based on dropdown
-    if DropdownSalesName != "Sales Name" and DropdownYears != "Years":
+    if DropdownSalesName != "Sales ID" and DropdownYears != "Year":
+        sales_data = get_salesdata_dash(cur, DropdownSalesName, DropdownYears)
         filtered_sales_data = sales_data
 
         # Create decorated pie chart using Altair for col1
@@ -50,6 +58,7 @@ def dashboard(salesyear, salesperson, sales_data, product_data, kpi_data, debtor
             st.subheader("Monthly Sales")
             st.altair_chart(circle_chart, use_container_width=True)
 
+        kpi_data = get_kpidata_dash(cur, DropdownSalesName, DropdownYears)
         filtered_kpi_data = kpi_data
 
         with col2:
@@ -98,12 +107,14 @@ def dashboard(salesyear, salesperson, sales_data, product_data, kpi_data, debtor
                 st.warning(f"Error in KPI calculations: {error}")
 
         # Filter debtor data based on dropdown for col3
+        debtor_data = get_debtordata_dash(cur, DropdownSalesName, DropdownYears)
         filtered_debtor_data = debtor_data
         with col3:
             st.subheader("Debtors")
             st.dataframe(filtered_debtor_data.reset_index(drop=True))
 
         # Filter product data based on dropdown for col4
+        product_data = get_productdata_dash(cur, DropdownSalesName, DropdownYears)
         filtered_product_data = product_data
 
         with col4:
