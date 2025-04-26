@@ -77,30 +77,29 @@ def login(users_data, conn):
             st.rerun()
 
     elif st.session_state.forgotpassword_mode:
-        try:
-            with st.form("Forgot Password Form"):
-                st.subheader("Forgot Password")
-                forgot_username = st.text_input("Username")
-                forgot_username = forgot_username.lower()
-                forgot_email = st.text_input("Email")
-                new_password = st.text_input("New Password", type="password")
-                confirm_password = st.text_input("Confirm Password", type="password")
-                submit_reset = st.form_submit_button("Reset Password")
+        with st.form("Forgot Password Form"):
+            st.subheader("Forgot Password")
+            forgot_username = st.text_input("Username")
+            forgot_username = forgot_username.lower()
+            forgot_email = st.text_input("Email")
+            new_password = st.text_input("New Password", type="password")
+            confirm_password = st.text_input("Confirm Password", type="password")
+            submit_reset = st.form_submit_button("Reset Password")
 
-            if submit_reset:
-                if forgot_username in users_data["Username"].values:
-                    user_email = users_data[users_data["Username"] == forgot_username]["Email"].values[0]
-                    if forgot_email != user_email:
-                        st.error("Email doesn't match the username.")
-                    elif new_password != confirm_password:
-                        st.error("Passwords do not match.")
-                    else:
-                        reset_password(conn, forgot_username, new_password)
-                        st.success("Password reset successfully. You can now log in.")
-                        st.session_state.forgotpassword_mode = False
-                        st.rerun()
-        except ValueError as error:
-                    st.error("Username not found.")
+        if submit_reset:
+            if forgot_username not in users_data["Username"].values:
+                st.error("Username not found.")
+            else:
+                user_email = users_data[users_data["Username"] == forgot_username]["Email"].values[0]
+                if forgot_email != user_email:
+                    st.error("Email doesn't match the username.")
+                elif new_password != confirm_password:
+                    st.error("Passwords do not match.")
+                else:
+                    reset_password(conn, forgot_username, new_password)
+                    st.success("Password reset successfully. You can now log in.")
+                    st.session_state.forgotpassword_mode = False
+                    st.rerun()
 
         if st.button("Back to login"):
                 st.session_state.forgotpassword_mode = False
