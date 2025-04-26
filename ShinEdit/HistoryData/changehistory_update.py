@@ -1,5 +1,6 @@
 from datetime import datetime
 from GetData.changehistorydata import get_changehistorydata
+from Web_Page.login_page import get_username
 
 def history_update(cur, conn, table, loc, subloc, act, ori, upd):
 
@@ -22,7 +23,7 @@ def history_update(cur, conn, table, loc, subloc, act, ori, upd):
     upd = str(upd)
 
     # Get username
-    username = "leeyeon1467"
+    username = get_username()
 
     # Current date & time
     date = datetime.today()
