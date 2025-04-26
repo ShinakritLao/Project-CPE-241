@@ -106,6 +106,5 @@ def login(users_data, conn):
                 st.session_state.forgotpassword_mode = False
                 st.rerun()
 
-    elif st.session_state.logged_in:
-        st.info(f"Logged in as: {st.session_state.username}")
-
+def get_username():
+    return st.session_state.username
