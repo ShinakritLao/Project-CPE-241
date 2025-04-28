@@ -32,11 +32,11 @@ def restoredata_CRUD(cur, conn, changehistory_data):
                     st.error(f"❌ Clear history failed: {e}")
                 finally:
                     st.session_state["confirm_clear"] = False
-                    st.experimental_rerun()
+                    st.rerun()
         with col2:
             if st.button("❌ Cancel Clear", use_container_width=True, key="cancel_clear_btn"):
                 st.session_state["confirm_clear"] = False
-                st.experimental_rerun()
+                st.rerun()
 
     st.markdown("---")
 
@@ -79,8 +79,8 @@ def restoredata_CRUD(cur, conn, changehistory_data):
                     st.error(f"❌ Restore failed: {e}")
                 finally:
                     st.session_state["confirm_restore"] = False
-                    st.experimental_rerun()
+                    st.rerun()
         with col2:
             if st.button("❌ Cancel Restore", use_container_width=True, key="cancel_restore_btn"):
                 st.session_state["confirm_restore"] = False
-                st.experimental_rerun()
+                st.rerun()
