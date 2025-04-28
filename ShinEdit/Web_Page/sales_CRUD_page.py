@@ -72,11 +72,11 @@ def Sales_CRUD(cur, conn, salesperson, all_sales_data, display_data):
                         st.error(f"❌ Insert failed: {e}")
                     finally:
                         st.session_state["confirm_add"] = False
-                        st.experimental_rerun()
+                        st.rerun()
             with col2:
                 if st.button("❌ Cancel Add", use_container_width=True, key="cancel_add_btn"):
                     st.session_state["confirm_add"] = False
-                    st.experimental_rerun()
+                    st.rerun()
 
     # ------------------ UPDATE RECORD ------------------
     with update_record:
@@ -142,11 +142,11 @@ def Sales_CRUD(cur, conn, salesperson, all_sales_data, display_data):
                         st.error(f"❌ Update failed: {e}")
                     finally:
                         st.session_state["confirm_update"] = False
-                        st.experimental_rerun()
+                        st.rerun()
             with col2:
                 if st.button("❌ Cancel Update", use_container_width=True, key="cancel_update_btn"):
                     st.session_state["confirm_update"] = False
-                    st.experimental_rerun()
+                    st.rerun()
 
     # ------------------ DELETE RECORD ------------------
     with delete_record:
@@ -173,8 +173,8 @@ def Sales_CRUD(cur, conn, salesperson, all_sales_data, display_data):
                         st.error(f"❌ Delete failed: {e}")
                     finally:
                         st.session_state["confirm_delete"] = False
-                        st.experimental_rerun()
+                        st.rerun()
             with col2:
                 if st.button("❌ Cancel Delete", use_container_width=True, key="cancel_delete_btn"):
                     st.session_state["confirm_delete"] = False
-                    st.experimental_rerun()
+                    st.rerun()

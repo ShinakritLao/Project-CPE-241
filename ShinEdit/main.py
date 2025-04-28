@@ -68,6 +68,7 @@ from Web_Page.sales_CRUD_page import Sales_CRUD
 from Web_Page.restoredata_page import restoredata_CRUD
 from Web_Page.users_page import show_user_sidebar
 from Web_Page.users_page import edit_user_page
+from Web_Page.users_all_page import users_all_page
 
 # Main function set up Streamlit
 def main():
@@ -93,13 +94,17 @@ def main():
         st.stop()
 
     # Create tabs
-    Sales_Dashboard_tab, Sales_CRUD_tab, Restore_CRUD_tab = st.tabs(["Sales Dashboard", "Sales", "Restore Data"])
+    Sales_Dashboard_tab, Sales_CRUD_tab, Users_tab, Restore_CRUD_tab = (
+        st.tabs(["Sales Dashboard", "Sales", "Users", "History Change"]))
 
     with Sales_Dashboard_tab:
         dashboard(salesyear, salesperson, cur)
 
     with Sales_CRUD_tab:
         Sales_CRUD(cur, conn, salesperson, sales_data, display_sales)
+
+    with Users_tab:
+        users_all_page(cur, conn, users_data, display_users)
 
     with Restore_CRUD_tab:
         restoredata_CRUD(cur, conn, changehistory_data)
