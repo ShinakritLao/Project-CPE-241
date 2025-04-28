@@ -139,7 +139,7 @@ def Sales_CRUD(cur, conn, salesperson, all_sales_data, display_data):
 
                 conn.commit()
 
-                st.warning("Record deleted successfully!")
+                st.success("Record deleted successfully!")
 
             except Exception as e:
                 st.error(f"Delete failed: {e}")
