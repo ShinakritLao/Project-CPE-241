@@ -10,16 +10,12 @@ month = ["January", "February", "March", "April", "May", "June",
 def Sales_CRUD(cur, conn, salesperson, all_sales_data, display_data):
     st.header("Sales Record")
 
-    # Load existing sales data
     st.dataframe(display_data)
 
-    # Add tab for add update delete
     add_record, update_record, delete_record = st.tabs(['Add', 'Update', 'Delete'])
 
-    # Add record to the table
+    # ------------------ ADD RECORD ------------------
     with add_record:
-
-        # Increase sales id
         if len(all_sales_data) == 0:
             new_value = "S001"
         else:
@@ -31,115 +27,154 @@ def Sales_CRUD(cur, conn, salesperson, all_sales_data, display_data):
 
         st.subheader("Add New Sale Record")
 
-        # Form to add new record
         with st.form("Add Record"):
-
-            new_sale_id = st.text_input("Sales ID", value = new_value, disabled = True)
+            new_sale_id = st.text_input("Sales ID", value=new_value, disabled=True)
             insert_salesperson = st.selectbox("Sales Person ID", salesperson)
             new_quantity = st.number_input("Number of product")
-            new_year = st.selectbox("Year", year, index = 3)
-            new_month = st.selectbox("Month", month, index = 3)
+            new_year = st.selectbox("Year", year, index=3)
+            new_month = st.selectbox("Month", month, index=3)
             new_amount = st.number_input("Sales Amount", min_value=0)
             submitted = st.form_submit_button("Add Sale")
 
-            # Button submitted
             if submitted:
-                try:
-                    cur.execute(
-                        "INSERT INTO sales (salesid, salespersonid, quantity, year, month, sales) VALUES (%s, %s, %s, %s, %s, %s)",
-                        (new_sale_id, insert_salesperson, new_quantity, new_year, new_month, new_amount)
-                    )
-                    conn.commit()
+                st.session_state["new_sale_data"] = {
+                    "id": new_sale_id,
+                    "salesperson": insert_salesperson,
+                    "quantity": new_quantity,
+                    "year": new_year,
+                    "month": new_month,
+                    "amount": new_amount
+                }
+                st.session_state["confirm_add"] = True
 
-                    # Update history change
-                    history_update(cur, conn, "Sales", new_sale_id, "SalesID", "Insert", "-", new_sale_id)
-                    history_update(cur, conn, "Sales", new_sale_id, "SalesPersonID", "Insert", "-", insert_salesperson)
-                    history_update(cur, conn, "Sales", new_sale_id, "Quantity", "Insert", "-", new_quantity)
-                    history_update(cur, conn, "Sales", new_sale_id, "Year", "Insert", "-", new_year)
-                    history_update(cur, conn, "Sales", new_sale_id, "Month", "Insert", "-", new_month)
-                    history_update(cur, conn, "Sales", new_sale_id, "Sales", "Insert", "-", new_amount)
+        if st.session_state.get("confirm_add", False):
+            st.warning("⚡ **Confirm Adding New Sale Record?**")
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("✅ Confirm Add", use_container_width=True, key="confirm_add_btn"):
+                    try:
+                        data = st.session_state["new_sale_data"]
+                        cur.execute(
+                            "INSERT INTO sales (salesid, salespersonid, quantity, year, month, sales) VALUES (%s, %s, %s, %s, %s, %s)",
+                            (data["id"], data["salesperson"], data["quantity"], data["year"], data["month"], data["amount"])
+                        )
+                        conn.commit()
 
-                    st.success("New sale record added successfully!")
+                        history_update(cur, conn, "Sales", data["id"], "SalesID", "Insert", "-", data["id"])
+                        history_update(cur, conn, "Sales", data["id"], "SalesPersonID", "Insert", "-", data["salesperson"])
+                        history_update(cur, conn, "Sales", data["id"], "Quantity", "Insert", "-", data["quantity"])
+                        history_update(cur, conn, "Sales", data["id"], "Year", "Insert", "-", data["year"])
+                        history_update(cur, conn, "Sales", data["id"], "Month", "Insert", "-", data["month"])
+                        history_update(cur, conn, "Sales", data["id"], "Sales", "Insert", "-", data["amount"])
 
-                except Exception as e:
-                    st.error(f"Insert failed: {e}")
+                        st.success("✅ New sale record added successfully!")
+                    except Exception as e:
+                        st.error(f"❌ Insert failed: {e}")
+                    finally:
+                        st.session_state["confirm_add"] = False
+                        st.experimental_rerun()
+            with col2:
+                if st.button("❌ Cancel Add", use_container_width=True, key="cancel_add_btn"):
+                    st.session_state["confirm_add"] = False
+                    st.experimental_rerun()
 
-    # Update record to the table
+    # ------------------ UPDATE RECORD ------------------
     with update_record:
         st.subheader("Update Sale Record")
 
-        # Display & selected data
-        selected_update_data = st.selectbox("Select Sale", all_sales_data["SalesID"].tolist(), key="update_selectbox")
+        selected_update_data = st.selectbox("Select Sale to Update", all_sales_data["SalesID"].tolist(), key="update_selectbox")
         current_data = all_sales_data.loc[all_sales_data['SalesID'] == selected_update_data]
-        st.dataframe(display_data.loc[display_data['Sales ID'] == current_data['SalesID'].values[0]])
+        st.dataframe(display_data.loc[display_data['Sales ID'] == selected_update_data])
 
-        # Form to update record
         with st.form("Update Record"):
+            update_salesperson = st.selectbox("Sales Person ID", salesperson, index=salesperson.index(current_data['SalesPersonID'].values[0]))
+            update_quantity = st.number_input("Number of product", value=current_data['Quantity'].values[0])
+            update_year = st.selectbox("Year", year, index=year.index(current_data['Year'].values[0]))
+            update_month = st.selectbox("Month", month, index=month.index(current_data['Month'].values[0]))
+            update_amount = st.number_input("Sales Amount", value=current_data['Sales'].values[0], min_value=0)
 
-            update_salesperson = st.selectbox("Sales Person ID", salesperson, index = salesperson.index(current_data['SalesPersonID'].values[0]))
-            update_quantity = st.number_input("Number of product", value = current_data['Quantity'].values[0])
-            update_year = st.selectbox("Year", year, index = year.index(current_data['Year'].values[0]))
-            update_month = st.selectbox("Month", month, index = month.index(current_data['Month'].values[0]))
-            new_amount = st.number_input("Sales Amount", value = current_data['Sales'].values[0], min_value = 0)
+            update_submitted = st.form_submit_button("Update Record")
 
-            # Button submitted
-            if st.form_submit_button("Update Record"):
-                try:
+            if update_submitted:
+                st.session_state["update_sale_data"] = {
+                    "salesid": selected_update_data,
+                    "salesperson": update_salesperson,
+                    "quantity": update_quantity,
+                    "year": update_year,
+                    "month": update_month,
+                    "sales": update_amount,
+                    "current": current_data.iloc[0]
+                }
+                st.session_state["confirm_update"] = True
 
-                    if update_salesperson != current_data['SalesPersonID'].values[0]:
-                        cur.execute("UPDATE sales SET salespersonid = %s WHERE salesid = %s",
-                                    (update_salesperson, selected_update_data))
-                        history_update(cur, conn, "Sales", selected_update_data, "SalesPersonID",
-                                       "Update", current_data['SalesPersonID'].values[0], update_salesperson)
+        if st.session_state.get("confirm_update", False):
+            st.warning("⚡ **Confirm Updating Sale Record?**")
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("✅ Confirm Update", use_container_width=True, key="confirm_update_btn"):
+                    try:
+                        data = st.session_state["update_sale_data"]
+                        current = data["current"]
 
-                    if update_quantity != current_data['Quantity'].values[0]:
-                        cur.execute("UPDATE sales SET quantity = %s WHERE salesid = %s",
-                                    (update_quantity, selected_update_data))
-                        history_update(cur, conn, "Sales", selected_update_data, "Quantity",
-                                       "Update", current_data['Quantity'].values[0], update_quantity)
+                        if data["salesperson"] != current['SalesPersonID']:
+                            cur.execute("UPDATE sales SET salespersonid = %s WHERE salesid = %s", (data["salesperson"], data["salesid"]))
+                            history_update(cur, conn, "Sales", data["salesid"], "SalesPersonID", "Update", current['SalesPersonID'], data["salesperson"])
 
-                    if update_year != current_data['Year'].values[0]:
-                        cur.execute("UPDATE sales SET year = %s WHERE salesid = %s",
-                                    (update_year, selected_update_data))
-                        history_update(cur, conn, "Sales", selected_update_data, "Year",
-                                       "Update", current_data['Year'].values[0], update_year)
+                        if data["quantity"] != current['Quantity']:
+                            cur.execute("UPDATE sales SET quantity = %s WHERE salesid = %s", (data["quantity"], data["salesid"]))
+                            history_update(cur, conn, "Sales", data["salesid"], "Quantity", "Update", current['Quantity'], data["quantity"])
 
-                    if update_month != current_data['Month'].values[0]:
-                        cur.execute("UPDATE sales SET month = %s WHERE salesid = %s",
-                                    (update_month, selected_update_data))
-                        history_update(cur, conn, "Sales", selected_update_data, "Month",
-                                       "Update", current_data['Month'].values[0], update_month)
+                        if data["year"] != current['Year']:
+                            cur.execute("UPDATE sales SET year = %s WHERE salesid = %s", (data["year"], data["salesid"]))
+                            history_update(cur, conn, "Sales", data["salesid"], "Year", "Update", current['Year'], data["year"])
 
-                    if new_amount != current_data['Sales'].values[0]:
-                        cur.execute("UPDATE sales SET sales = %s WHERE salesid = %s",
-                                    (new_amount, selected_update_data))
-                        history_update(cur, conn, "Sales", selected_update_data, "Sales",
-                                       "Update", current_data['Sales'].values[0], new_amount)
+                        if data["month"] != current['Month']:
+                            cur.execute("UPDATE sales SET month = %s WHERE salesid = %s", (data["month"], data["salesid"]))
+                            history_update(cur, conn, "Sales", data["salesid"], "Month", "Update", current['Month'], data["month"])
 
-                    conn.commit()
-                    st.success("Record updated successfully!")
+                        if data["sales"] != current['Sales']:
+                            cur.execute("UPDATE sales SET sales = %s WHERE salesid = %s", (data["sales"], data["salesid"]))
+                            history_update(cur, conn, "Sales", data["salesid"], "Sales", "Update", current['Sales'], data["sales"])
 
-                except Exception as e:
-                    st.error(f"Update failed: {e}")
+                        conn.commit()
+                        st.success("✅ Record updated successfully!")
+                    except Exception as e:
+                        st.error(f"❌ Update failed: {e}")
+                    finally:
+                        st.session_state["confirm_update"] = False
+                        st.experimental_rerun()
+            with col2:
+                if st.button("❌ Cancel Update", use_container_width=True, key="cancel_update_btn"):
+                    st.session_state["confirm_update"] = False
+                    st.experimental_rerun()
 
-    # Delete record from the table
+    # ------------------ DELETE RECORD ------------------
     with delete_record:
         st.subheader("Delete Sale Record")
 
-        # Display & selected data
-        selected_delete_data = st.selectbox("Select Sale", all_sales_data["SalesID"].tolist(), key="delete_selectbox")
+        selected_delete_data = st.selectbox("Select Sale to Delete", all_sales_data["SalesID"].tolist(), key="delete_selectbox")
         st.dataframe(display_data.loc[display_data['Sales ID'] == selected_delete_data])
 
-        # Button submitted
-        if st.button("Delete Record"):
-            try:
+        if st.button("Delete Record", key="delete_btn"):
+            st.session_state["delete_sale_id"] = selected_delete_data
+            st.session_state["confirm_delete"] = True
 
-                cur.execute("DELETE FROM sales WHERE salesid = %s", (selected_delete_data,))
-                history_update(cur, conn, "Sales", selected_delete_data, "-", "Delete", "-", "-")
-
-                conn.commit()
-
-                st.warning("Record deleted successfully!")
-
-            except Exception as e:
-                st.error(f"Delete failed: {e}")
+        if st.session_state.get("confirm_delete", False):
+            st.warning("⚡ **Confirm Deleting Sale Record?**")
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("✅ Confirm Delete", use_container_width=True, key="confirm_delete_btn"):
+                    try:
+                        cur.execute("DELETE FROM sales WHERE salesid = %s", (st.session_state["delete_sale_id"],))
+                        history_update(cur, conn, "Sales", st.session_state["delete_sale_id"], "-", "Delete", "-", "-")
+                        conn.commit()
+                        st.warning("✅ Record deleted successfully!")
+                    except Exception as e:
+                        st.error(f"❌ Delete failed: {e}")
+                    finally:
+                        st.session_state["confirm_delete"] = False
+                        st.experimental_rerun()
+            with col2:
+                if st.button("❌ Cancel Delete", use_container_width=True, key="cancel_delete_btn"):
+                    st.session_state["confirm_delete"] = False
+                    st.experimental_rerun()
