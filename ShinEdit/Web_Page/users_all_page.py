@@ -20,7 +20,7 @@ def users_all_page(cur, conn, users_data, display_users):
     if st.session_state.get("confirm_delete", False):
         st.warning("⚡ **Confirm Deleting User?**")
         col1, col2 = st.columns(2)
-        with col1:
+        with col2:
             if st.button("✅ Confirm Delete", use_container_width=True, key="confirm_delete_user_btn"):
                 try:
                     cur.execute("DELETE FROM Users WHERE Username = %s", (st.session_state["delete_username"],))
@@ -33,7 +33,7 @@ def users_all_page(cur, conn, users_data, display_users):
                 finally:
                     st.session_state["confirm_delete"] = False
                     st.rerun()
-        with col2:
+        with col1:
             if st.button("❌ Cancel Delete", use_container_width=True, key="cancel_delete_user_btn"):
                 st.session_state["confirm_delete"] = False
                 st.rerun()
@@ -63,7 +63,7 @@ def users_all_page(cur, conn, users_data, display_users):
         if st.session_state.get(f"confirm_status_{idx}", False):
             st.warning(f"⚡ **Confirm {button_status} User?**")
             col1, col2 = st.columns(2)
-            with col1:
+            with col2:
                 if st.button(f"✅ Confirm {button_status}", use_container_width=True, key=f"confirm_user_status_{idx}"):
                     try:
                         cur.execute(f"UPDATE Users SET Status = %s WHERE Username = %s",
@@ -77,7 +77,7 @@ def users_all_page(cur, conn, users_data, display_users):
                     finally:
                         st.session_state[f"confirm_status_{idx}"] = False
                         st.rerun()
-            with col2:
+            with col1:
                 if st.button(f"❌ Cancel {button_status}", use_container_width=True, key=f"cancel_user_status_btn_{idx}"):
                     st.session_state[f"confirm_status_{idx}"] = False
                     st.rerun()
