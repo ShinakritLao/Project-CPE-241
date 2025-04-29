@@ -76,7 +76,7 @@ def main():
     st.set_page_config(layout="wide")
 
     # Run login first
-    login(users_data,conn)
+    login(users_data,salesperson_data,conn)
 
     # If not logged in, stop everything
     if not st.session_state.logged_in:
