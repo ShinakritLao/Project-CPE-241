@@ -50,7 +50,7 @@ def Sales_CRUD(cur, conn, salesperson, all_sales_data, display_data):
         if st.session_state.get("confirm_add", False):
             st.warning("⚡ **Confirm Adding New Sale Record?**")
             col1, col2 = st.columns(2)
-            with col1:
+            with col2:
                 if st.button("✅ Confirm Add", use_container_width=True, key="confirm_add_btn"):
                     try:
                         data = st.session_state["new_sale_data"]
@@ -73,7 +73,7 @@ def Sales_CRUD(cur, conn, salesperson, all_sales_data, display_data):
                     finally:
                         st.session_state["confirm_add"] = False
                         st.rerun()
-            with col2:
+            with col1:
                 if st.button("❌ Cancel Add", use_container_width=True, key="cancel_add_btn"):
                     st.session_state["confirm_add"] = False
                     st.rerun()
@@ -110,7 +110,7 @@ def Sales_CRUD(cur, conn, salesperson, all_sales_data, display_data):
         if st.session_state.get("confirm_update", False):
             st.warning("⚡ **Confirm Updating Sale Record?**")
             col1, col2 = st.columns(2)
-            with col1:
+            with col2:
                 if st.button("✅ Confirm Update", use_container_width=True, key="confirm_update_btn"):
                     try:
                         data = st.session_state["update_sale_data"]
@@ -143,7 +143,7 @@ def Sales_CRUD(cur, conn, salesperson, all_sales_data, display_data):
                     finally:
                         st.session_state["confirm_update"] = False
                         st.rerun()
-            with col2:
+            with col1:
                 if st.button("❌ Cancel Update", use_container_width=True, key="cancel_update_btn"):
                     st.session_state["confirm_update"] = False
                     st.rerun()
@@ -162,7 +162,7 @@ def Sales_CRUD(cur, conn, salesperson, all_sales_data, display_data):
         if st.session_state.get("confirm_delete", False):
             st.warning("⚡ **Confirm Deleting Sale Record?**")
             col1, col2 = st.columns(2)
-            with col1:
+            with col2:
                 if st.button("✅ Confirm Delete", use_container_width=True, key="confirm_delete_btn"):
                     try:
                         cur.execute("DELETE FROM sales WHERE salesid = %s", (st.session_state["delete_sale_id"],))
@@ -174,7 +174,7 @@ def Sales_CRUD(cur, conn, salesperson, all_sales_data, display_data):
                     finally:
                         st.session_state["confirm_delete"] = False
                         st.rerun()
-            with col2:
+            with col1:
                 if st.button("❌ Cancel Delete", use_container_width=True, key="cancel_delete_btn"):
                     st.session_state["confirm_delete"] = False
                     st.rerun()

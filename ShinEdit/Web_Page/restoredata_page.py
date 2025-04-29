@@ -23,7 +23,7 @@ def restoredata_CRUD(cur, conn, changehistory_data):
     if st.session_state.get("confirm_clear", False):
         st.warning("⚡ **Confirm clearing all change history?**")
         col1, col2 = st.columns(2)
-        with col1:
+        with col2:
             if st.button("✅ Confirm Clear", use_container_width=True, key="confirm_clear_btn"):
                 try:
                     clear_history(cur, conn)
@@ -33,7 +33,7 @@ def restoredata_CRUD(cur, conn, changehistory_data):
                 finally:
                     st.session_state["confirm_clear"] = False
                     st.rerun()
-        with col2:
+        with col1:
             if st.button("❌ Cancel Clear", use_container_width=True, key="cancel_clear_btn"):
                 st.session_state["confirm_clear"] = False
                 st.rerun()
@@ -64,7 +64,7 @@ def restoredata_CRUD(cur, conn, changehistory_data):
     if st.session_state.get("confirm_restore", False):
         st.warning("⚡ **Confirm restoring the selected record?**")
         col1, col2 = st.columns(2)
-        with col1:
+        with col2:
             if st.button("✅ Confirm Restore", use_container_width=True, key="confirm_restore_btn"):
                 try:
                     data = st.session_state["restore_data"]
@@ -80,7 +80,7 @@ def restoredata_CRUD(cur, conn, changehistory_data):
                 finally:
                     st.session_state["confirm_restore"] = False
                     st.rerun()
-        with col2:
+        with col1:
             if st.button("❌ Cancel Restore", use_container_width=True, key="cancel_restore_btn"):
                 st.session_state["confirm_restore"] = False
                 st.rerun()
