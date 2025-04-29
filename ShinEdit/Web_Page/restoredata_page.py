@@ -8,12 +8,13 @@ from HistoryData.restoredata import clear_history
 def restoredata_CRUD(cur, conn, changehistory_data):
     st.header("Change History")
 
+    # Feature = st.selectbox("Select Feature", ['Username', 'Table', 'Action', 'Year', 'Month'])
+    # Details = st.selectbox("Select Details")
+
     st.dataframe(changehistory_data)
     change_id = changehistory_data[changehistory_data['Action'].isin(['Update', 'Delete'])]
 
     # --- CLEAR HISTORY ---
-    st.subheader("Clear History")
-
     if st.button("Clear history", key="clear_history_button"):
         if len(changehistory_data) != 0:
             st.session_state["confirm_clear"] = True
