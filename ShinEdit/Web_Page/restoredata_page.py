@@ -6,7 +6,7 @@ from HistoryData.restoredata import restore_update
 from HistoryData.restoredata import clear_history
 
 def restoredata_CRUD(cur, conn, changehistory_data):
-    st.header("Change History")
+    st.header("History")
 
     # Feature = st.selectbox("Select Feature", ['Username', 'Table', 'Action', 'Year', 'Month'])
     # Details = st.selectbox("Select Details")
