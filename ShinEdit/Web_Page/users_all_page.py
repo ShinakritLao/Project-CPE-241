@@ -40,8 +40,10 @@ def users_all_page(cur, conn, users_data, display_users):
 
     # ------------------ BAN USER ------------------
 
+    st.markdown("---")
+    st.subheader("Banned / Unbanned User")
+
     for idx, selected_user_data in display_users.iterrows():
-        st.markdown("---")
 
         current_user_users = pd.DataFrame(selected_user_data).T
         st.dataframe(current_user_users)
