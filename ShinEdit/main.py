@@ -21,7 +21,7 @@ conn = psycopg2.connect(
 cur = conn.cursor()
 
 # Dropdown
-from DropdownInfo.salesyear import get_salesyear
+from DropdownInfo.sales import get_salesyear
 from DropdownInfo.salesperson import get_salesperson
 
 salesyear = get_salesyear(cur)
@@ -68,6 +68,7 @@ from Web_Page.sales_CRUD_page import Sales_CRUD
 from Web_Page.restoredata_page import restoredata_CRUD
 from Web_Page.users_page import show_user_sidebar
 from Web_Page.users_page import edit_user_page
+from Web_Page.users_all_page import users_all_page
 
 # Main function set up Streamlit
 def main():
@@ -75,7 +76,7 @@ def main():
     st.set_page_config(layout="wide")
 
     # Run login first
-    login(users_data,conn)
+    login(users_data,salesperson_data,conn)
 
     # If not logged in, stop everything
     if not st.session_state.logged_in:
@@ -93,13 +94,17 @@ def main():
         st.stop()
 
     # Create tabs
-    Sales_Dashboard_tab, Sales_CRUD_tab, Restore_CRUD_tab = st.tabs(["Sales Dashboard", "Sales", "Restore Data"])
+    Sales_Dashboard_tab, Sales_CRUD_tab, Users_tab, Restore_CRUD_tab = (
+        st.tabs(["Sales Dashboard", "Sales", "Users", "History"]))
 
     with Sales_Dashboard_tab:
         dashboard(salesyear, salesperson, cur)
 
     with Sales_CRUD_tab:
         Sales_CRUD(cur, conn, salesperson, sales_data, display_sales)
+
+    with Users_tab:
+        users_all_page(cur, conn, users_data, display_users)
 
     with Restore_CRUD_tab:
         restoredata_CRUD(cur, conn, changehistory_data)

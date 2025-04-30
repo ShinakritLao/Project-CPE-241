@@ -1,2 +1,2 @@
 from . import salesperson
-from . import salesyear
+from . import sales
