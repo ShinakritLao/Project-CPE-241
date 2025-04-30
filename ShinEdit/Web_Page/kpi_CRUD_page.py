@@ -54,7 +54,7 @@ def KPI_CRUD(cur, conn, salesperson, all_data, display_data):
             new_targetq = st.number_input("Target Quotation", min_value = 0)
             new_quotation = st.number_input("Quotation", min_value=0)
             new_targetso = st.number_input("Target Sales Order", min_value=0)
-            new_salesorder = st.number_input("Sale Order", min_value=0)
+            new_salesorder = st.number_input("Sales Order", min_value=0)
             new_allcustomer = st.number_input("All Customer", min_value=0)
             new_customerinhand = st.number_input("Customer in Hand", min_value=0)
             submitted = st.form_submit_button("Add KPI")
@@ -96,7 +96,7 @@ def KPI_CRUD(cur, conn, salesperson, all_data, display_data):
                         history_update(cur, conn, "kpi", data["id"], "allcustomer", "Insert", "-", data["allcustomer"])
                         history_update(cur, conn, "kpi", data["id"], "customerinhand", "Insert", "-", data["customerinhand"])
 
-                        st.success("✅ New kpi record added successfully!")
+                        st.success("✅ New KPI record added successfully!")
                     except Exception as e:
                         st.error(f"❌ Insert failed: {e}")
                         st.stop()
@@ -123,7 +123,7 @@ def KPI_CRUD(cur, conn, salesperson, all_data, display_data):
             update_targetq = st.number_input("Target Quotation", value = update_data['Target Quotation'][0], min_value = 0)
             update_quotation = st.number_input("Quotation", value=update_data['Quotation'][0], min_value=0)
             update_targetso = st.number_input("Target Sales Order", value=update_data['Target Sales Order'][0], min_value=0)
-            update_salesorder = st.number_input("Sale Order", value=update_data['Sale Order'][0], min_value=0)
+            update_salesorder = st.number_input("Sales Order", value=update_data['Sales Order'][0], min_value=0)
             update_allcustomer = st.number_input("All Customer", value=update_data['All Customer'][0], min_value=0)
             update_customerinhand = st.number_input("Customer in Hand", value=update_data['Customer in Hand'][0], min_value=0)
 
@@ -167,8 +167,8 @@ def KPI_CRUD(cur, conn, salesperson, all_data, display_data):
                         if data["targetso"] != current['Target Sales Order']:
                             updatedata(cur, conn, 'kpi', data["kpi_id"], 'targetso', current['Target Sales Order'], data["targetso"])
 
-                        if data["salesorder"] != current['Sale Order']:
-                            updatedata(cur, conn, 'kpi', data["kpi_id"], 'saleorder', current['Sale Order'], data["salesorder"])
+                        if data["salesorder"] != current['Sales Order']:
+                            updatedata(cur, conn, 'kpi', data["kpi_id"], 'salesorder', current['Sales Order'], data["salesorder"])
 
                         if data["allcustomer"] != current['All Customer']:
                             updatedata(cur, conn, 'kpi', data["kpi_id"], 'allcustomer', current['All Customer'], data["allcustomer"])
@@ -205,7 +205,7 @@ def KPI_CRUD(cur, conn, salesperson, all_data, display_data):
                 "targetq": delete_data['Target Quotation'][0],
                 "quotation": delete_data['Quotation'][0],
                 "targetso": delete_data['Target Sales Order'][0],
-                "salesorder": delete_data['Sale Order'][0],
+                "salesorder": delete_data['Sales Order'][0],
                 "allcustomer": delete_data['All Customer'][0],
                 "customerinhand": delete_data['Customer in Hand'][0]
             }
@@ -223,8 +223,7 @@ def KPI_CRUD(cur, conn, salesperson, all_data, display_data):
                         conn.commit()
 
                         history_update(cur, conn, "kpi", data["id"], "kpi_id", "Delete", data["id"], "-")
-                        history_update(cur, conn, "kpi", data["id"], "salespersonid", "Delete", "-",
-                                       data["salesperson"])
+                        history_update(cur, conn, "kpi", data["id"], "salespersonid", "Delete", data["salesperson"], "-")
                         history_update(cur, conn, "kpi", data["id"], "year", "Delete", data["year"], "-")
                         history_update(cur, conn, "kpi", data["id"], "targetq", "Delete", data["targetq"], "-")
                         history_update(cur, conn, "kpi", data["id"], "quotation", "Delete", data["quotation"], "-")
