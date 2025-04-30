@@ -19,11 +19,11 @@ def Sales_CRUD(cur, conn, salesperson, all_data, display_data):
 
     with col1:
         filopt = ["Default", "SalesPersonID", "Year", "Month"]
-        filters = st.selectbox("Filter Search", filopt, index = 0)
+        filters = st.selectbox("Filter Search", filopt, index = 0, key = 'Filter_Sales')
 
     with col2:
         if filters == 'Default':
-            st.selectbox("", options = [], disabled = True)
+            st.selectbox("Select Details", options = [], disabled = True, key = 'Details_Sales')
             displaying = display_data
         else:
             details = get_details(cur, 'Sales', filters)
@@ -47,7 +47,7 @@ def Sales_CRUD(cur, conn, salesperson, all_data, display_data):
 
         st.subheader("Add New Sale Record")
 
-        with st.form("Add Record"):
+        with st.form("Add Sales Record"):
             new_id = st.text_input("Sales ID", value = new_value, disabled = True)
             insert_salesperson = st.selectbox("Sales Person ID", salesperson)
             new_quantity = st.number_input("Number of product")
@@ -71,7 +71,7 @@ def Sales_CRUD(cur, conn, salesperson, all_data, display_data):
             st.warning("⚡ **Confirm Adding New Sales Record?**")
             col1, col2 = st.columns(2)
             with col2:
-                if st.button("✅ Confirm Add", use_container_width = True, key = "confirm_add_btn"):
+                if st.button("✅ Confirm Add", use_container_width = True, key = "confirm_sales_add_btn"):
                     try:
                         data = st.session_state["new_sale_data"]
                         cur.execute(
@@ -95,7 +95,7 @@ def Sales_CRUD(cur, conn, salesperson, all_data, display_data):
                         st.session_state["confirm_add"] = False
                         st.rerun()
             with col1:
-                if st.button("❌ Cancel Add", use_container_width = True, key = "cancel_add_btn"):
+                if st.button("❌ Cancel Add", use_container_width = True, key = "cancel_sales_add_btn"):
                     st.session_state["confirm_add"] = False
                     st.rerun()
 
@@ -107,15 +107,15 @@ def Sales_CRUD(cur, conn, salesperson, all_data, display_data):
         update_data = get_one_salesdata(cur, 'SalesID', selected_update)
         st.dataframe(update_data)
 
-        with st.form("Update Record"):
+        with st.form("Update Sales Record"):
             update_salesperson = st.selectbox("Sales Person ID", salesperson,
-                                              index = salesperson.index(update_data['Sales Person ID'].values[0]))
-            update_quantity = st.number_input("Number of product", value = update_data['Quantity'].values[0])
-            update_year = st.selectbox("Year", year, index = year.index(update_data['Year'].values[0]))
-            update_month = st.selectbox("Month", month, index = month.index(update_data['Month'].values[0]))
-            update_amount = st.number_input("Sales Amount", value = update_data['Sales'].values[0], min_value = 0)
+                                              index = salesperson.index(update_data['Sales Person ID'][0]))
+            update_quantity = st.number_input("Number of product", value = update_data['Quantity'][0])
+            update_year = st.selectbox("Year", year, index = year.index(update_data['Year'][0]))
+            update_month = st.selectbox("Month", month, index = month.index(update_data['Month'][0]))
+            update_amount = st.number_input("Sales Amount", value = update_data['Sales'][0], min_value = 0)
 
-            update_submitted = st.form_submit_button("Update Record")
+            update_submitted = st.form_submit_button("Update Sales Record")
 
             if update_submitted:
                 st.session_state["update_sale_data"] = {
@@ -133,7 +133,7 @@ def Sales_CRUD(cur, conn, salesperson, all_data, display_data):
             st.warning("⚡ **Confirm Updating Sale Record?**")
             col1, col2 = st.columns(2)
             with col2:
-                if st.button("✅ Confirm Update", use_container_width = True, key = "confirm_update_btn"):
+                if st.button("✅ Confirm Update", use_container_width = True, key = "confirm_sales_update_btn"):
                     try:
                         data = st.session_state["update_sale_data"]
                         current = data["current"]
@@ -162,7 +162,7 @@ def Sales_CRUD(cur, conn, salesperson, all_data, display_data):
                         st.session_state["confirm_update"] = False
                         st.rerun()
             with col1:
-                if st.button("❌ Cancel Update", use_container_width = True, key = "cancel_update_btn"):
+                if st.button("❌ Cancel Update", use_container_width = True, key = "cancel_sales_update_btn"):
                     st.session_state["confirm_update"] = False
                     st.rerun()
 
@@ -177,11 +177,11 @@ def Sales_CRUD(cur, conn, salesperson, all_data, display_data):
         if st.button("Delete Record", key = "delete_sales_btn"):
             st.session_state["delete_sale_data"] = {
                 "id": selected_delete,
-                "salesperson": delete_data['Sales Person ID'].values[0],
-                "quantity": delete_data['Quantity'].values[0],
-                "year": delete_data['Year'].values[0],
-                "month": delete_data['Month'].values[0],
-                "sales": delete_data['Sales'].values[0]
+                "salesperson": delete_data['Sales Person ID'][0],
+                "quantity": delete_data['Quantity'][0],
+                "year": delete_data['Year'][0],
+                "month": delete_data['Month'][0],
+                "sales": delete_data['Sales'][0]
             }
             st.session_state["confirm_delete"] = True
 
@@ -189,7 +189,7 @@ def Sales_CRUD(cur, conn, salesperson, all_data, display_data):
             st.warning("⚡ **Confirm Deleting Sale Record?**")
             col1, col2 = st.columns(2)
             with col2:
-                if st.button("✅ Confirm Delete", use_container_width = True, key = "confirm_delete_btn"):
+                if st.button("✅ Confirm Delete", use_container_width = True, key = "confirm_sales_delete_btn"):
                     try:
                         data = st.session_state["delete_sale_data"]
 
@@ -211,6 +211,6 @@ def Sales_CRUD(cur, conn, salesperson, all_data, display_data):
                         st.session_state["confirm_delete"] = False
                         st.rerun()
             with col1:
-                if st.button("❌ Cancel Delete", use_container_width = True, key = "cancel_delete_btn"):
+                if st.button("❌ Cancel Delete", use_container_width = True, key = "cancel_sales_delete_btn"):
                     st.session_state["confirm_delete"] = False
                     st.rerun()
