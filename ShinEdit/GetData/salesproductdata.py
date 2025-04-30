@@ -29,3 +29,19 @@ def get_display_salesproduct(cur):
                                                         'Total Cost', 'Status'])
 
     return display_data
+
+def get_one_salesproductdata(cur, loc, subloc):
+
+    # SQL part: Get data from the table in database
+    cur.execute(f"""
+                SELECT SalesID, Product.ProductID, ProductName, TotalSales, TotalCost, Status FROM SalesProduct
+                JOIN Product ON SalesProduct.ProductID = Product.ProductID WHERE SalesProduct.{loc} = '{subloc}' 
+                ORDER BY SalesID, Product.ProductID
+                """, (subloc,))
+    display_sql = cur.fetchall()
+
+    # Convert the result to a pandas DataFrame
+    display_data = pd.DataFrame(display_sql, columns = ['Sales ID', 'Product ID', 'Product Name', 'Total Sales',
+                                                        'Total Cost', 'Status'])
+
+    return display_data

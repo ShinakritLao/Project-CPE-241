@@ -1,9 +1,10 @@
 from HistoryData.changehistory_update import history_update
+from HistoryData.restoredata import get_primary
 
 def updatedata(cur, conn, table, loc, subloc, original_data, new_value):
 
     # Set primary key of the table
-    pri = table + 'ID'
+    pri = get_primary(table)
 
     # SQL part: Update new value
     cur.execute(f"UPDATE {table} SET {subloc} = %s WHERE {pri} = '{loc}'", (new_value,))
