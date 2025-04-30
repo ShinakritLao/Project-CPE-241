@@ -1,5 +1,8 @@
 import pandas as pd
 import streamlit as st
+
+from GetData.changehistorydata import get_deletedata
+from GetData.changehistorydata import get_columns
 from HistoryData.changehistory_update import history_update
 
 def get_primary(table):
@@ -39,14 +42,21 @@ def restore_update(cur, conn, table, loc, subloc, current_value, new_value, chan
 
 def restore_delete(cur, conn, table, loc):
 
+    # Get columns name & restore data
+    columns = get_columns(cur, table)
+    values = get_deletedata(cur, table, loc)
+
+    # Convert into SQL friendly
+    columns_sql = ', '.join(columns)
+    values_sql = ', '.join(['%s'] * len(values))
 
     # SQL part: Update data from the table in database
-    cur.execute(f"INSERT INTO {table} ({columns_sql}) VALUES ({values_sql});")
+    cur.execute(f"INSERT INTO {table} ({columns_sql}) VALUES ({values_sql});", values)
     conn.commit()
 
     # Save change in history table
-    for col in columns:
-        history_update(cur, conn, table, loc, columns[col], "Restore", "-", values[col])
+    for col, val in zip(columns, values):
+        history_update(cur, conn, table, loc, col, "Restore", "-", val)
 
 def clear_history(cur, conn):
 

@@ -26,25 +26,37 @@ def get_one_historydata(cur, loc, subloc):
 
     return display_data
 
-# def increase_pri(value):
-#     prefix = ''.join(filter(str.isalpha, value))
-#     number = ''.join(filter(str.isdigit, value))
-#     new_number = str(int(number) + 1).zfill(len(number))
-#     return prefix + new_number
-#
-# def get_deletedata(cur, table, subloc):
-#
-#     # SQL part: Get data from the table in database
-#     cur.execute(f"SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '{table}';")
-#     result = cur.fetchone()
-#
-#     for _ in range(int(result[0])):
-#         cur.execute(f"SELECT Original_Data FROM History_Change WHERE ChangeID = '{subloc}';")
-#         increase_pri(subloc)
-#
-#     deletedata = []
-#
-#     for record in result:
-#         deletedata.append(result[record])
-#     print(deletedata)
-#     return deletedata
+def get_columns(cur, table):
+
+    # SQL part: Get data from the table in database
+    cur.execute(f"SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '{table}';")
+    result = cur.fetchall()
+
+    columnsdata = []
+
+    for record in result:
+        columnsdata.append(record[0])
+    return columnsdata
+
+def increase_pri(value):
+    prefix = ''.join(filter(str.isalpha, value))
+    number = ''.join(filter(str.isdigit, value))
+    new_number = str(int(number) + 1).zfill(len(number))
+    return prefix + new_number
+
+def get_deletedata(cur, table, loc):
+
+    # SQL part: Get data from the table in database
+    cur.execute(f"SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '{table}';")
+    result = cur.fetchone()
+
+    deletedata = []
+
+    for _ in range(int(result[0])):
+        cur.execute(f"SELECT Original_Data FROM History_Change WHERE ChangeID = '{loc}';")
+        loc = increase_pri(loc)
+
+        result = cur.fetchone()
+        deletedata.append(result[0])
+
+    return deletedata

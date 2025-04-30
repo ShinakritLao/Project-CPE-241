@@ -86,15 +86,15 @@ def KPI_CRUD(cur, conn, salesperson, all_data, display_data):
                         )
                         conn.commit()
 
-                        history_update(cur, conn, "KPI", data["id"], "KPI_ID", "Insert", "-", data["id"])
-                        history_update(cur, conn, "KPI", data["id"], "SalesPersonID", "Insert", "-", data["salesperson"])
-                        history_update(cur, conn, "KPI", data["id"], "Year", "Insert", "-", data["year"])
-                        history_update(cur, conn, "KPI", data["id"], "TargetQ", "Insert", "-", data["targetq"])
-                        history_update(cur, conn, "KPI", data["id"], "Quotation", "Insert", "-", data["quotation"])
-                        history_update(cur, conn, "KPI", data["id"], "TargetSO", "Insert", "-", data["targetso"])
-                        history_update(cur, conn, "KPI", data["id"], "SalesOrder", "Insert", "-", data["salesorder"])
-                        history_update(cur, conn, "KPI", data["id"], "AllCustomer", "Insert", "-", data["allcustomer"])
-                        history_update(cur, conn, "KPI", data["id"], "CustomerInHand", "Insert", "-", data["customerinhand"])
+                        history_update(cur, conn, "kpi", data["id"], "kpi_id", "Insert", "-", data["id"])
+                        history_update(cur, conn, "kpi", data["id"], "salespersonid", "Insert", "-", data["salesperson"])
+                        history_update(cur, conn, "kpi", data["id"], "year", "Insert", "-", data["year"])
+                        history_update(cur, conn, "kpi", data["id"], "targetq", "Insert", "-", data["targetq"])
+                        history_update(cur, conn, "kpi", data["id"], "quotation", "Insert", "-", data["quotation"])
+                        history_update(cur, conn, "kpi", data["id"], "targetso", "Insert", "-", data["targetso"])
+                        history_update(cur, conn, "kpi", data["id"], "salesorder", "Insert", "-", data["salesorder"])
+                        history_update(cur, conn, "kpi", data["id"], "allcustomer", "Insert", "-", data["allcustomer"])
+                        history_update(cur, conn, "kpi", data["id"], "customerinhand", "Insert", "-", data["customerinhand"])
 
                         st.success("✅ New kpi record added successfully!")
                     except Exception as e:
@@ -154,27 +154,27 @@ def KPI_CRUD(cur, conn, salesperson, all_data, display_data):
                         current = data["current"]
 
                         if data["salesperson"] != current['Sales Person ID']:
-                            updatedata(cur, conn, 'KPI', data["kpi_id"], 'SalesPersonID', current['Sales Person ID'], data["salesperson"])
+                            updatedata(cur, conn, 'kpi', data["kpi_id"], 'salespersonid', current['Sales Person ID'], data["salesperson"])
 
                         if data["year"] != current['Year']:
-                            updatedata(cur, conn, 'KPI', data["kpi_id"], 'Year', current['Year'], data["year"])
+                            updatedata(cur, conn, 'kpi', data["kpi_id"], 'year', current['Year'], data["year"])
 
                         if data["targetq"] != current['Target Quotation']:
-                            updatedata(cur, conn, 'KPI', data["kpi_id"], 'TargetQuotation', current['Target Quotation'], data["targetq"])
+                            updatedata(cur, conn, 'kpi', data["kpi_id"], 'targetq', current['Target Quotation'], data["targetq"])
 
                         if data["quotation"] != current['Quotation']:
-                            updatedata(cur, conn, 'KPI', data["kpi_id"], 'Quotation', current['Quotation'], data["quotation"])
+                            updatedata(cur, conn, 'kpi', data["kpi_id"], 'quotation', current['Quotation'], data["quotation"])
                         if data["targetso"] != current['Target Sales Order']:
-                            updatedata(cur, conn, 'KPI', data["kpi_id"], 'TargetSalesOrder', current['Target Sales Order'], data["targetso"])
+                            updatedata(cur, conn, 'kpi', data["kpi_id"], 'targetso', current['Target Sales Order'], data["targetso"])
 
                         if data["salesorder"] != current['Sale Order']:
-                            updatedata(cur, conn, 'KPI', data["kpi_id"], 'SaleOrder', current['Sale Order'], data["salesorder"])
+                            updatedata(cur, conn, 'kpi', data["kpi_id"], 'saleorder', current['Sale Order'], data["salesorder"])
 
                         if data["allcustomer"] != current['All Customer']:
-                            updatedata(cur, conn, 'KPI', data["kpi_id"], 'AllCustomer', current['All Customer'], data["allcustomer"])
+                            updatedata(cur, conn, 'kpi', data["kpi_id"], 'allcustomer', current['All Customer'], data["allcustomer"])
 
                         if data["customerinhand"] != current['Customer in Hand']:
-                            updatedata(cur, conn, 'KPI', data["kpi_id"], 'CustomerInHand', current['Customer in Hand'], data["customerinhand"])
+                            updatedata(cur, conn, 'kpi', data["kpi_id"], 'customerinhand', current['Customer in Hand'], data["customerinhand"])
 
                         conn.commit()
                         st.success("✅ Record updated successfully!")
@@ -222,17 +222,17 @@ def KPI_CRUD(cur, conn, salesperson, all_data, display_data):
                         cur.execute("DELETE FROM kpi WHERE kpi_id = %s", (data["id"],))
                         conn.commit()
 
-                        history_update(cur, conn, "KPI", data["id"], "KPI ID", "Delete", data["id"], "-")
-                        history_update(cur, conn, "KPI", data["id"], "SalesPersonID", "Delete", "-",
+                        history_update(cur, conn, "kpi", data["id"], "kpi_id", "Delete", data["id"], "-")
+                        history_update(cur, conn, "kpi", data["id"], "salespersonid", "Delete", "-",
                                        data["salesperson"])
-                        history_update(cur, conn, "KPI", data["id"], "Year", "Delete", data["year"], "-")
-                        history_update(cur, conn, "KPI", data["id"], "Target Quotation", "Delete", data["targetq"], "-")
-                        history_update(cur, conn, "KPI", data["id"], "Quotation", "Delete", data["quotation"], "-")
-                        history_update(cur, conn, "KPI", data["id"], "Target Sales Order", "Delete",
+                        history_update(cur, conn, "kpi", data["id"], "year", "Delete", data["year"], "-")
+                        history_update(cur, conn, "kpi", data["id"], "targetq", "Delete", data["targetq"], "-")
+                        history_update(cur, conn, "kpi", data["id"], "quotation", "Delete", data["quotation"], "-")
+                        history_update(cur, conn, "kpi", data["id"], "targetso", "Delete",
                                        data["targetso"], "-")
-                        history_update(cur, conn, "KPI", data["id"], "Sale Order", "Delete", data["salesorder"], "-")
-                        history_update(cur, conn, "KPI", data["id"], "All Customer", "Delete", data["allcustomer"], "-")
-                        history_update(cur, conn, "KPI", data["id"], "Customer in Hand", "Delete",
+                        history_update(cur, conn, "kpi", data["id"], "salesorder", "Delete", data["salesorder"], "-")
+                        history_update(cur, conn, "kpi", data["id"], "allcustomer", "Delete", data["allcustomer"], "-")
+                        history_update(cur, conn, "kpi", data["id"], "customerinhand", "Delete",
                                        data["customerinhand"], "-")
 
                         st.success("✅ Record deleted successfully!")

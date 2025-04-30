@@ -65,7 +65,6 @@ display_users = get_display_users(cur)
 from Web_Page.login_page import login
 from Web_Page.dashboard_page import dashboard
 from Web_Page.sales_CRUD_page import Sales_CRUD
-from Web_Page.kpi_CRUD_page import KPI_CRUD
 from Web_Page.restoredata_page import restoredata_CRUD
 from Web_Page.users_page import show_user_sidebar
 from Web_Page.users_page import edit_user_page
@@ -75,38 +74,34 @@ from Web_Page.users_all_page import users_all_page
 def main():
     # SetUp wide mode
     st.set_page_config(layout="wide")
-    st.session_state.username = 'leeyeon1467'
 
-    # # Run login first
-    # login(users_data,salesperson_data,conn)
-    #
-    # # If not logged in, stop everything
-    # if not st.session_state.logged_in:
-    #     st.stop()
-    #
-    # #show sidebar
-    # show_user_sidebar(users_data, display_salespersondata, st.session_state.username,conn)
-    #
-    # #check modify button
-    # if "modify_page" not in st.session_state:
-    #     st.session_state.modify_page = False
-    #
-    # if st.session_state.modify_page:
-    #     edit_user_page(users_data, display_salespersondata, st.session_state.username,conn)
-    #     st.stop()
+    # Run login first
+    login(users_data,salesperson_data,conn)
+
+    # If not logged in, stop everything
+    if not st.session_state.logged_in:
+        st.stop()
+
+    #show sidebar
+    show_user_sidebar(users_data, display_salespersondata, st.session_state.username,conn)
+
+    #check modify button
+    if "modify_page" not in st.session_state:
+        st.session_state.modify_page = False
+
+    if st.session_state.modify_page:
+        edit_user_page(users_data, display_salespersondata, st.session_state.username,conn)
+        st.stop()
 
     # Create tabs
-    Sales_Dashboard_tab, Sales_CRUD_tab, KPI_CRUD_tab, Users_tab, Restore_CRUD_tab = (
-        st.tabs(["Sales Dashboard", "Sales", "KPI", "Users", "History"]))
+    Sales_Dashboard_tab, Sales_CRUD_tab, Users_tab, Restore_CRUD_tab = (
+        st.tabs(["Sales Dashboard", "Sales", "Users", "History"]))
 
     with Sales_Dashboard_tab:
         dashboard(salesyear, salesperson, cur)
 
     with Sales_CRUD_tab:
         Sales_CRUD(cur, conn, salesperson, sales_data, display_sales)
-
-    with KPI_CRUD_tab:
-        KPI_CRUD(cur, conn, salesperson, kpi_data, display_kpi)
 
     with Users_tab:
         users_all_page(cur, conn, users_data, display_users)
