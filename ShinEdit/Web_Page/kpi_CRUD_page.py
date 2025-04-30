@@ -23,11 +23,11 @@ def KPI_CRUD(cur, conn, salesperson, all_data, display_data):
 
     with col2:
         if filters == 'Default':
-            st.selectbox("", options=[], disabled=True, key="default_disabled_select")
+            st.selectbox("Select Details", options=[], disabled=True, key="default_disabled_select")
             displaying = display_data
         else:
             details = get_details(cur, 'KPI', filters)
-            selected_details = st.selectbox("", details, index=0, key="filter_details_select")
+            selected_details = st.selectbox("Select Details", details, index=0, key="filter_details_select")
             displaying = get_one_kpidata(cur, filters, selected_details)
 
     # ------------------ DISPLAY DATA & SET UP ------------------
@@ -96,7 +96,7 @@ def KPI_CRUD(cur, conn, salesperson, all_data, display_data):
                         history_update(cur, conn, "KPI", data["id"], "AllCustomer", "Insert", "-", data["allcustomer"])
                         history_update(cur, conn, "KPI", data["id"], "CustomerInHand", "Insert", "-", data["customerinhand"])
 
-                        st.success("✅ New sale record added successfully!")
+                        st.success("✅ New kpi record added successfully!")
                     except Exception as e:
                         st.error(f"❌ Insert failed: {e}")
                         st.stop()
@@ -145,7 +145,7 @@ def KPI_CRUD(cur, conn, salesperson, all_data, display_data):
                 st.session_state["confirm_update"] = True
 
         if st.session_state.get("confirm_update", False):
-            st.warning("⚡ **Confirm Updating Sale Record?**")
+            st.warning("⚡ **Confirm Updating KPI Record?**")
             col1, col2 = st.columns(2)
             with col2:
                 if st.button("✅ Confirm Update", use_container_width = True, key = "confirm_kpi_update_btn"):
@@ -160,21 +160,21 @@ def KPI_CRUD(cur, conn, salesperson, all_data, display_data):
                             updatedata(cur, conn, 'KPI', data["kpi_id"], 'Year', current['Year'], data["year"])
 
                         if data["targetq"] != current['Target Quotation']:
-                            updatedata(cur, conn, 'KPI', data["kpi_id"], 'Target Quotation', current['Target Quotation'], data["Target Quotation"])
+                            updatedata(cur, conn, 'KPI', data["kpi_id"], 'TargetQuotation', current['Target Quotation'], data["targetq"])
 
                         if data["quotation"] != current['Quotation']:
                             updatedata(cur, conn, 'KPI', data["kpi_id"], 'Quotation', current['Quotation'], data["quotation"])
                         if data["targetso"] != current['Target Sales Order']:
-                            updatedata(cur, conn, 'KPI', data["kpi_id"], 'Target Sales Order', current['Target Sales Order'], data["Target Sales Order"])
+                            updatedata(cur, conn, 'KPI', data["kpi_id"], 'TargetSalesOrder', current['Target Sales Order'], data["targetso"])
 
                         if data["salesorder"] != current['Sale Order']:
-                            updatedata(cur, conn, 'KPI', data["kpi_id"], 'Sale Order', current['Sale Order'], data["salesorder"])
+                            updatedata(cur, conn, 'KPI', data["kpi_id"], 'SaleOrder', current['Sale Order'], data["salesorder"])
 
                         if data["allcustomer"] != current['All Customer']:
-                            updatedata(cur, conn, 'KPI', data["kpi_id"], 'All Customer', current['All Customer'], data["All Customer"])
+                            updatedata(cur, conn, 'KPI', data["kpi_id"], 'AllCustomer', current['All Customer'], data["allcustomer"])
 
                         if data["customerinhand"] != current['Customer in Hand']:
-                            updatedata(cur, conn, 'KPI', data["kpi_id"], 'Customer in Hand', current['Customer in Hand'], data["Customer in Hand"])
+                            updatedata(cur, conn, 'KPI', data["kpi_id"], 'CustomerInHand', current['Customer in Hand'], data["customerinhand"])
 
                         conn.commit()
                         st.success("✅ Record updated successfully!")
@@ -191,7 +191,7 @@ def KPI_CRUD(cur, conn, salesperson, all_data, display_data):
 
     # ------------------ DELETE RECORD ------------------
     with delete_record:
-        st.subheader("Delete Sale Record")
+        st.subheader("Delete KPI Record")
 
         selected_delete = st.selectbox("Select KPI to Delete", all_data["KPI_ID"].tolist(), key="delete_kpi")
         delete_data = get_one_kpidata(cur, 'KPI_ID', selected_delete)
@@ -212,7 +212,7 @@ def KPI_CRUD(cur, conn, salesperson, all_data, display_data):
             st.session_state["confirm_delete"] = True
 
         if st.session_state.get("confirm_delete", False):
-            st.warning("⚡ **Confirm Deleting Sale Record?**")
+            st.warning("⚡ **Confirm Deleting KPI Record?**")
             col1, col2 = st.columns(2)
             with col2:
                 if st.button("✅ Confirm Delete", use_container_width = True, key = "confirm_kpi_delete_btn"):
