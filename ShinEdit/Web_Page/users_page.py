@@ -22,6 +22,10 @@ def show_user_sidebar(users_data, salespersondata, username,conn):
 
         # Logout
         if st.button("Logout"):
+            cur = conn.cursor()
+            cur.execute("UPDATE Users SET Status = %s WHERE Username = %s", ("Inactive", username))
+            conn.commit()
+
             st.session_state.logged_in = False
             st.rerun()
 
