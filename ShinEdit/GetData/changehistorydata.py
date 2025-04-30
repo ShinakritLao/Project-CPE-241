@@ -1,5 +1,7 @@
 import pandas as pd
 
+# from HistoryData.restoredata import get_primary
+
 def get_changehistorydata(cur):
 
     # SQL part: Get data from the table in database
@@ -11,3 +13,38 @@ def get_changehistorydata(cur):
                                                         'Action', 'OriginalData', 'UpdatedData', 'Date', 'Time'])
 
     return changehistorydata
+
+def get_one_historydata(cur, loc, subloc):
+
+    # SQL part: Get data from the table in database
+    cur.execute(f"SELECT * FROM History_Change WHERE {loc} = '{subloc}' ORDER BY ChangeID;")
+    display_sql = cur.fetchall()
+
+    # Convert the result to a pandas DataFrame
+    display_data = pd.DataFrame(display_sql, columns = ['ChangeID', 'Username', 'Table', 'Location', 'SubLocation',
+                                                        'Action', 'OriginalData', 'UpdatedData', 'Date', 'Time'])
+
+    return display_data
+
+# def increase_pri(value):
+#     prefix = ''.join(filter(str.isalpha, value))
+#     number = ''.join(filter(str.isdigit, value))
+#     new_number = str(int(number) + 1).zfill(len(number))
+#     return prefix + new_number
+#
+# def get_deletedata(cur, table, subloc):
+#
+#     # SQL part: Get data from the table in database
+#     cur.execute(f"SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '{table}';")
+#     result = cur.fetchone()
+#
+#     for _ in range(int(result[0])):
+#         cur.execute(f"SELECT Original_Data FROM History_Change WHERE ChangeID = '{subloc}';")
+#         increase_pri(subloc)
+#
+#     deletedata = []
+#
+#     for record in result:
+#         deletedata.append(result[record])
+#     print(deletedata)
+#     return deletedata

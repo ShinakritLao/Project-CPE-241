@@ -74,24 +74,25 @@ from Web_Page.users_all_page import users_all_page
 def main():
     # SetUp wide mode
     st.set_page_config(layout="wide")
+    st.session_state.username = 'leeyeon1467'
 
-    # Run login first
-    login(users_data,salesperson_data,conn)
-
-    # If not logged in, stop everything
-    if not st.session_state.logged_in:
-        st.stop()
-
-    #show sidebar
-    show_user_sidebar(users_data, display_salespersondata, st.session_state.username,conn)
-
-    #check modify button
-    if "modify_page" not in st.session_state:
-        st.session_state.modify_page = False
-
-    if st.session_state.modify_page:
-        edit_user_page(users_data, display_salespersondata, st.session_state.username,conn)
-        st.stop()
+    # # Run login first
+    # login(users_data,salesperson_data,conn)
+    #
+    # # If not logged in, stop everything
+    # if not st.session_state.logged_in:
+    #     st.stop()
+    #
+    # #show sidebar
+    # show_user_sidebar(users_data, display_salespersondata, st.session_state.username,conn)
+    #
+    # #check modify button
+    # if "modify_page" not in st.session_state:
+    #     st.session_state.modify_page = False
+    #
+    # if st.session_state.modify_page:
+    #     edit_user_page(users_data, display_salespersondata, st.session_state.username,conn)
+    #     st.stop()
 
     # Create tabs
     Sales_Dashboard_tab, Sales_CRUD_tab, Users_tab, Restore_CRUD_tab = (

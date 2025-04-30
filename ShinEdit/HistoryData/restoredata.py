@@ -37,16 +37,16 @@ def restore_update(cur, conn, table, loc, subloc, current_value, new_value, chan
     # Save change in history table
     history_update(cur, conn, table, changeid, subloc, "Restore", current_value, new_value)
 
-# def restore_delete(cur, conn, table, loc, new_value):
+def restore_delete(cur, conn, table, loc):
 
-#    # Declare primary key for table
-#      pri = get_primary(table)
-#
-#    # SQL part: Update data from the table in database
-#      cur.execute("INSERT INTO %s")
 
-#    # Save change in history table
-#      history_update(cur, conn, table, loc, "-", "Restore", "-", new_value)
+    # SQL part: Update data from the table in database
+    cur.execute(f"INSERT INTO {table} ({columns_sql}) VALUES ({values_sql});")
+    conn.commit()
+
+    # Save change in history table
+    for col in columns:
+        history_update(cur, conn, table, loc, columns[col], "Restore", "-", values[col])
 
 def clear_history(cur, conn):
 

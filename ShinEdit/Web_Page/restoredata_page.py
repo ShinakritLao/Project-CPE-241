@@ -1,6 +1,12 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+
+from GetData.changehistorydata import get_one_historydata
+from DropdownInfo.filtersearch import get_details
+from DropdownInfo.filtersearch import get_restore
+from HistoryData.query_data import updatedata
+
 from HistoryData.restoredata import get_current_data
 from HistoryData.restoredata import restore_update
 from HistoryData.restoredata import clear_history
@@ -8,13 +14,26 @@ from HistoryData.restoredata import clear_history
 def restoredata_CRUD(cur, conn, changehistory_data):
     st.header("History")
 
-    # Feature = st.selectbox("Select Feature", ['Username', 'Table', 'Action', 'Year', 'Month'])
-    # Details = st.selectbox("Select Details")
+    # ------------------ FILTER SEARCH ------------------
+    col1, col2 = st.columns(2)
 
-    st.dataframe(changehistory_data)
-    change_id = changehistory_data[changehistory_data['Action'].isin(['Update', 'Delete'])]
+    with col1:
+        filopt = ["Default", "Username", "Selected_Table", "Action"]
+        filters = st.selectbox("Filter Search", filopt, index = 0)
 
-    # --- CLEAR HISTORY ---
+    with col2:
+        if filters == 'Default':
+            st.selectbox("Select Details", options = [], disabled = True, key = 'filters_history')
+            displaying = changehistory_data
+        else:
+            details = get_details(cur, 'History_Change', filters)
+            selected_details = st.selectbox("", details, index = 0, key = 'details_history')
+            displaying = get_one_historydata(cur, filters, selected_details)
+
+    # ------------------ DISPLAY DATA ------------------
+    st.dataframe(displaying)
+
+    # ------------------ CLEAR HISTORY ------------------
     if st.button("Clear history", key="clear_history_button"):
         if len(changehistory_data) != 0:
             st.session_state["confirm_clear"] = True
@@ -44,19 +63,20 @@ def restoredata_CRUD(cur, conn, changehistory_data):
     # --- RESTORE DATA ---
     st.subheader("Restore Data")
 
-    selected_restore = st.selectbox("Select Change History Record", change_id['ChangeID'].tolist())
-    selected_data = changehistory_data.loc[changehistory_data['ChangeID'] == selected_restore]
-    st.dataframe(selected_data)
+    restoreopt = get_restore(cur)
+    selected_restore = st.selectbox("Select History Record", restoreopt, key = 'restore_btn')
+    restore_data = get_one_historydata(cur, 'ChangeID', selected_restore)
+    st.dataframe(restore_data)
 
     if st.button("Restore", key="restore_button"):
-        if len(selected_data) != 0:
+        if len(restore_data) != 0:
             st.session_state["restore_data"] = {
-                "table": selected_data['Table'].values[0],
-                "loc": selected_data['Location'].values[0],
-                "subloc": selected_data['SubLocation'].values[0],
-                "ori_data": selected_data['OriginalData'].values[0],
-                "changeid": selected_data['ChangeID'].values[0],
-                "action": selected_data['Action'].values[0]
+                "table": restore_data['Table'][0],
+                "loc": restore_data['Location'][0],
+                "subloc": restore_data['SubLocation'][0],
+                "ori_data": restore_data['OriginalData'][0],
+                "changeid": restore_data['ChangeID'][0],
+                "action": restore_data['Action'][0]
             }
             st.session_state["confirm_restore"] = True
         else:
