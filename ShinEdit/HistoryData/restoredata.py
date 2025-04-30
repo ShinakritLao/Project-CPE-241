@@ -1,12 +1,15 @@
 import pandas as pd
 import streamlit as st
+
+from GetData.changehistorydata import get_deletedata
+from GetData.changehistorydata import get_columns
 from HistoryData.changehistory_update import history_update
 
 def get_primary(table):
 
-    if table == 'KPI': pri = table + "_ID"
-    elif table == 'Users': pri = "username"
-    else: pri = table + "ID"
+    if table == 'KPI' or 'kpi' : pri = table + "_id"
+    elif table == 'Users' or 'users' : pri = "username"
+    else: pri = table + "id"
 
     return pri
 
@@ -37,16 +40,23 @@ def restore_update(cur, conn, table, loc, subloc, current_value, new_value, chan
     # Save change in history table
     history_update(cur, conn, table, changeid, subloc, "Restore", current_value, new_value)
 
-# def restore_delete(cur, conn, table, loc, new_value):
+def restore_delete(cur, conn, table, loc):
 
-#    # Declare primary key for table
-#      pri = get_primary(table)
-#
-#    # SQL part: Update data from the table in database
-#      cur.execute("INSERT INTO %s")
+    # Get columns name & restore data
+    columns = get_columns(cur, table)
+    values = get_deletedata(cur, table, loc)
 
-#    # Save change in history table
-#      history_update(cur, conn, table, loc, "-", "Restore", "-", new_value)
+    # Convert into SQL friendly
+    columns_sql = ', '.join(columns)
+    values_sql = ', '.join(['%s'] * len(values))
+
+    # SQL part: Update data from the table in database
+    cur.execute(f"INSERT INTO {table} ({columns_sql}) VALUES ({values_sql});", values)
+    conn.commit()
+
+    # Save change in history table
+    for col, val in zip(columns, values):
+        history_update(cur, conn, table, loc, col, "Restore", "-", val)
 
 def clear_history(cur, conn):
 
