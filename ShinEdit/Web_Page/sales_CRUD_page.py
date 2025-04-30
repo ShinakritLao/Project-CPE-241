@@ -80,12 +80,12 @@ def Sales_CRUD(cur, conn, salesperson, all_data, display_data):
                         )
                         conn.commit()
 
-                        history_update(cur, conn, "Sales", data["id"], "SalesID", "Insert", "-", data["id"])
-                        history_update(cur, conn, "Sales", data["id"], "SalesPersonID", "Insert", "-", data["salesperson"])
-                        history_update(cur, conn, "Sales", data["id"], "Quantity", "Insert", "-", data["quantity"])
-                        history_update(cur, conn, "Sales", data["id"], "Year", "Insert", "-", data["year"])
-                        history_update(cur, conn, "Sales", data["id"], "Month", "Insert", "-", data["month"])
-                        history_update(cur, conn, "Sales", data["id"], "Sales", "Insert", "-", data["sales"])
+                        history_update(cur, conn, "sales", data["id"], "salesid", "Insert", "-", data["id"])
+                        history_update(cur, conn, "sales", data["id"], "salespersonid", "Insert", "-", data["salesperson"])
+                        history_update(cur, conn, "sales", data["id"], "quantity", "Insert", "-", data["quantity"])
+                        history_update(cur, conn, "sales", data["id"], "year", "Insert", "-", data["year"])
+                        history_update(cur, conn, "sales", data["id"], "month", "Insert", "-", data["month"])
+                        history_update(cur, conn, "sales", data["id"], "sales", "Insert", "-", data["sales"])
 
                         st.success("✅ New sale record added successfully!")
                     except Exception as e:
@@ -139,19 +139,19 @@ def Sales_CRUD(cur, conn, salesperson, all_data, display_data):
                         current = data["current"]
 
                         if data["salesperson"] != current['Sales Person ID']:
-                            updatedata(cur, conn, 'Sales', data["salesid"], 'SalesPersonID', current['Sales Person ID'], data["salesperson"])
+                            updatedata(cur, conn, 'sales', data["salesid"], 'salespersonid', current['Sales Person ID'], data["salesperson"])
 
                         if data["quantity"] != current['Quantity']:
-                            updatedata(cur, conn, 'Sales', data["salesid"], 'Quantity', current['Quantity'], data["quantity"])
+                            updatedata(cur, conn, 'sales', data["salesid"], 'quantity', current['Quantity'], data["quantity"])
 
                         if data["year"] != current['Year']:
-                            updatedata(cur, conn, 'Sales', data["salesid"], 'Year', current['Year'], data["year"])
+                            updatedata(cur, conn, 'sales', data["salesid"], 'year', current['Year'], data["year"])
 
                         if data["month"] != current['Month']:
-                            updatedata(cur, conn, 'Sales', data["salesid"], 'Month', current['Month'], data["month"])
+                            updatedata(cur, conn, 'sales', data["salesid"], 'month', current['Month'], data["month"])
 
                         if data["sales"] != current['Sales']:
-                            updatedata(cur, conn, 'Sales', data["salesid"], 'Sales', current['Sales'], data["sales"])
+                            updatedata(cur, conn, 'sales', data["salesid"], 'sales', current['Sales'], data["sales"])
 
                         conn.commit()
                         st.success("✅ Record updated successfully!")
@@ -196,12 +196,12 @@ def Sales_CRUD(cur, conn, salesperson, all_data, display_data):
                         cur.execute("DELETE FROM sales WHERE salesid = %s", (data["id"],))
                         conn.commit()
 
-                        history_update(cur, conn, "Sales", data["id"], "SalesID", "Delete", data["id"], "-")
-                        history_update(cur, conn, "Sales", data["id"], "SalesPersonID", "Delete", data["salesperson"], "-")
-                        history_update(cur, conn, "Sales", data["id"], "Quantity", "Delete", data["quantity"], "-")
-                        history_update(cur, conn, "Sales", data["id"], "Year", "Delete", data["year"], "-")
-                        history_update(cur, conn, "Sales", data["id"], "Month", "Delete", data["month"], "-")
-                        history_update(cur, conn, "Sales", data["id"], "Sales", "Delete", data["sales"], "-")
+                        history_update(cur, conn, "sales", data["id"], "salesid", "Delete", data["id"], "-")
+                        history_update(cur, conn, "sales", data["id"], "salespersonid", "Delete", data["salesperson"], "-")
+                        history_update(cur, conn, "sales", data["id"], "quantity", "Delete", data["quantity"], "-")
+                        history_update(cur, conn, "sales", data["id"], "year", "Delete", data["year"], "-")
+                        history_update(cur, conn, "sales", data["id"], "month", "Delete", data["month"], "-")
+                        history_update(cur, conn, "sales", data["id"], "sales", "Delete", data["sales"], "-")
 
                         st.success("✅ Record deleted successfully!")
                     except Exception as e:

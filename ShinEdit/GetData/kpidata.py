@@ -55,7 +55,7 @@ def get_display_kpi(cur):
     # Convert the result to a pandas DataFrame
     display_data = pd.DataFrame(display_sql, columns = ['KPI ID','Sales Person ID', 'Sales Name', 'Year',
                                                         'Target Quotation', 'Quotation', 'Target Sales Order',
-                                                        'Sale Order', 'All Customer', 'Customer in Hand'])
+                                                        'Sales Order', 'All Customer', 'Customer in Hand'])
 
     return display_data
 
@@ -72,6 +72,6 @@ def get_one_kpidata(cur, loc, subloc):
     # Convert the result to a pandas DataFrame
     display_data = pd.DataFrame(display_sql, columns = ['KPI ID','Sales Person ID', 'Sales Name', 'Year',
                                                         'Target Quotation', 'Quotation', 'Target Sales Order',
-                                                        'Sale Order', 'All Customer', 'Customer in Hand'])
+                                                        'Sales Order', 'All Customer', 'Customer in Hand'])
 
     return display_data
