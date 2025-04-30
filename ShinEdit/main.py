@@ -65,6 +65,7 @@ display_users = get_display_users(cur)
 from Web_Page.login_page import login
 from Web_Page.dashboard_page import dashboard
 from Web_Page.sales_CRUD_page import Sales_CRUD
+from Web_Page.kpi_CRUD_page import KPI_CRUD
 from Web_Page.restoredata_page import restoredata_CRUD
 from Web_Page.users_page import show_user_sidebar
 from Web_Page.users_page import edit_user_page
@@ -95,14 +96,17 @@ def main():
     #     st.stop()
 
     # Create tabs
-    Sales_Dashboard_tab, Sales_CRUD_tab, Users_tab, Restore_CRUD_tab = (
-        st.tabs(["Sales Dashboard", "Sales", "Users", "History"]))
+    Sales_Dashboard_tab, Sales_CRUD_tab, KPI_CRUD_tab, Users_tab, Restore_CRUD_tab = (
+        st.tabs(["Sales Dashboard", "Sales", "KPI", "Users", "History"]))
 
     with Sales_Dashboard_tab:
         dashboard(salesyear, salesperson, cur)
 
     with Sales_CRUD_tab:
         Sales_CRUD(cur, conn, salesperson, sales_data, display_sales)
+
+    with KPI_CRUD_tab:
+        KPI_CRUD(cur, conn, salesperson, kpi_data, display_kpi)
 
     with Users_tab:
         users_all_page(cur, conn, users_data, display_users)
