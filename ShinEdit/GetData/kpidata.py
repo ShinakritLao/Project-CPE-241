@@ -58,3 +58,20 @@ def get_display_kpi(cur):
                                                         'Sale Order', 'All Customer', 'Customer in Hand'])
 
     return display_data
+
+def get_one_kpidata(cur, loc, subloc):
+
+    # SQL part: Get data from the table in database
+    cur.execute(f"""
+                SELECT KPI_ID, KPI.SalesPersonID, SalesName, Year, TargetQ, Quotation, TargetSO, SalesOrder,
+                AllCustomer, CustomerInHand FROM KPI JOIN SalesPerson ON KPI.SalesPersonID = SalesPerson.SalesPersonID 
+                WHERE KPI.{loc} = '{subloc}' ORDER BY KPI_ID;
+                """, (subloc,))
+    display_sql = cur.fetchall()
+
+    # Convert the result to a pandas DataFrame
+    display_data = pd.DataFrame(display_sql, columns = ['KPI ID','Sales Person ID', 'Sales Name', 'Year',
+                                                        'Target Quotation', 'Quotation', 'Target Sales Order',
+                                                        'Sale Order', 'All Customer', 'Customer in Hand'])
+
+    return display_data

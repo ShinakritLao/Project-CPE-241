@@ -46,3 +46,19 @@ def get_display_sales(cur):
                                                       'Year', 'Month', 'Sales'])
 
     return display_data
+
+def get_one_salesdata(cur, loc, subloc):
+
+    # SQL part: Get data from the table in database
+    cur.execute(f"""
+                SELECT SalesID, Sales.SalesPersonID, SalesName, Quantity, Year, Month, Sales FROM Sales
+                JOIN SalesPerson ON Sales.SalesPersonID = SalesPerson.SalesPersonID WHERE Sales.{loc} = '{subloc}' 
+                ORDER BY SalesID;
+                """, (subloc,))
+    display_sql = cur.fetchall()
+
+    # Convert the result to a pandas DataFrame
+    display_data = pd.DataFrame(display_sql, columns = ['Sales ID', 'Sales Person ID', 'Sales Name', 'Quantity',
+                                                      'Year', 'Month', 'Sales'])
+
+    return display_data

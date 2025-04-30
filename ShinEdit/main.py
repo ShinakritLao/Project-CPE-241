@@ -21,7 +21,7 @@ conn = psycopg2.connect(
 cur = conn.cursor()
 
 # Dropdown
-from DropdownInfo.salesyear import get_salesyear
+from DropdownInfo.sales import get_salesyear
 from DropdownInfo.salesperson import get_salesperson
 
 salesyear = get_salesyear(cur)
@@ -95,7 +95,7 @@ def main():
 
     # Create tabs
     Sales_Dashboard_tab, Sales_CRUD_tab, Users_tab, Restore_CRUD_tab = (
-        st.tabs(["Sales Dashboard", "Sales", "Users", "History Change"]))
+        st.tabs(["Sales Dashboard", "Sales", "Users", "History"]))
 
     with Sales_Dashboard_tab:
         dashboard(salesyear, salesperson, cur)
