@@ -98,6 +98,62 @@ def main():
         edit_user_page(users_data, display_salespersondata, st.session_state.username,conn)
         st.stop()
 
+    # role = st.session_state.get("role", "Representative")
+    #
+    # if role == "Chief":
+    #     Sales_Dashboard_tab,Product_CRUD_tab, SalesPerson_CRUD_tab, Sales_CRUD_tab, SalesProduct_CRUD_tab, KPI_CRUD_tab, Debtor_CRUD_tab, Users_tab, Restore_CRUD_tab = (
+    #         st.tabs(["Sales Dashboard", "Product", "Sales Person", "Sales", "Sales Product", "KPI", "Debtor", "Users", "History"]))
+    #
+    #     with Sales_Dashboard_tab:
+    #         dashboard(salesyear, salesperson, cur)
+    #     with Product_Product_CRUD_tab:
+    #         dashboard(salesyear, salesperson, cur)
+    #     with SalesPerson_CRUD_tab:
+    #         SalesPerson_CRUD(cur, conn, salesperson_data, display_salespersondata)
+    #     with Sales_CRUD_tab:
+    #         Sales_CRUD(cur, conn, salesperson, sales_data, display_sales)
+    #     with SalesProduct_CRUD_tab:
+    #         SalesProduct_CRUD(cur, conn, salesperson, salesproduct_data, display_salesproduct)
+    #     with KPI_CRUD_tab:
+    #         KPI_CRUD(cur, conn, salesperson, kpi_data, display_kpi)
+    #     with Debtor_CRUD_tab:
+    #         Debtor_CRUD(cur, conn, debtor_data, display_debtor)
+    #     with Users_tab:
+    #         users_all_page(cur, conn, users_data, display_users)
+    #     with Restore_CRUD_tab:
+    #         restoredata_CRUD(cur, conn, changehistory_data)
+    #
+    # elif role == "Manager":
+    #     Sales_Dashboard_tab, SalesPerson_CRUD_tab, Sales_CRUD_tab, SalesProduct_CRUD_tab, KPI_CRUD_tab, Debtor_CRUD_tab = (
+    #         st.tabs(["Sales Dashboard", "Sales Person", "Sales", "Sales Product", "KPI", "Debtor"]))
+    #
+    #     with Sales_Dashboard_tab:
+    #         dashboard(salesyear, salesperson, cur)
+    #     with SalesPerson_CRUD_tab:
+    #         SalesPerson_CRUD(cur, conn, salesperson_data, display_salespersondata)
+    #     with Sales_CRUD_tab:
+    #         Sales_CRUD(cur, conn, salesperson, sales_data, display_sales)
+    #     with SalesProduct_CRUD_tab:
+    #         SalesProduct_CRUD(cur, conn, salesperson, salesproduct_data, display_salesproduct)
+    #     with KPI_CRUD_tab:
+    #         KPI_CRUD(cur, conn, salesperson, kpi_data, display_kpi)
+    #     with Debtor_CRUD_tab:
+    #         Debtor_CRUD(cur, conn, debtor_data, display_debtor)
+    #
+    # elif role == "Representative":
+    #     Sales_Dashboard_tab, Sales_CRUD_tab, SalesProduct_CRUD_tab, Debtor_CRUD_tab = (
+    #         st.tabs(["Sales Dashboard", "Sales", "Sales Product", "Debtor"]))
+    #
+    #     with Sales_Dashboard_tab:
+    #         dashboard(salesyear, salesperson, cur)
+    #     with Sales_CRUD_tab:
+    #         Sales_CRUD(cur, conn, salesperson, sales_data, display_sales)
+    #     with SalesProduct_CRUD_tab:
+    #         SalesProduct_CRUD(cur, conn, salesperson, salesproduct_data, display_salesproduct)
+    #     with Debtor_CRUD_tab:
+    #         Debtor_CRUD(cur, conn, debtor_data, display_debtor)
+
+
     # Create tabs
     Sales_Dashboard_tab, Sales_CRUD_tab, KPI_CRUD_tab, Debtor_CRUD_tab, SalesProduct_CRUD_tab, SalesPerson_CRUD_tab,  Users_tab, Restore_CRUD_tab = (
         st.tabs(["Sales Dashboard", "Sales", "KPI", "Debtor", "Sales Product", "Sales Person" , "Users", "History"]))
@@ -111,38 +167,21 @@ def main():
     with KPI_CRUD_tab:
         KPI_CRUD(cur, conn, salesperson, kpi_data, display_kpi)
 
+    with Debtor_CRUD_tab:
+        Debtor_CRUD(cur, conn, debtor_data, display_debtor)
+
+    with SalesProduct_CRUD_tab:
+        SalesProduct_CRUD(cur, conn, salesperson, salesproduct_data, display_salesproduct)
+
+    with SalesPerson_CRUD_tab:
+        SalesPerson_CRUD(cur, conn, salesperson_data, display_salespersondata)
+
     with Users_tab:
         users_all_page(cur, conn, users_data, display_users)
 
     with Restore_CRUD_tab:
         restoredata_CRUD(cur, conn, changehistory_data)
 
-    with Debtor_CRUD_tab:
-        Debtor_CRUD(cur, conn, debtor_data, display_debtor)
-
-    with SalesProduct_CRUD_tab:
-        SalesProduct_CRUD(cur, conn, salesperson ,salesproduct_data, display_salesproduct)
-
-    with SalesPerson_CRUD_tab:
-        SalesPerson_CRUD(cur, conn, salesperson_data, display_salespersondata)
-
-        # # Based on user position (role), show specific pages
-        # if st.session_state.position == "???":
-        #     Sales_Dashboard_tab, Sales_CRUD_tab, Restore_CRUD_tab = st.tabs(
-        #         ["Sales Dashboard", "Sales", "Restore Data"])
-        #     with Sales_Dashboard_tab:
-        #         dashboard(salesyear, salesperson, cur)
-        #     with Sales_CRUD_tab:
-        #         Sales_CRUD(cur, conn, salesperson, sales_data, display_sales)
-        #     with Restore_CRUD_tab:
-        #         restoredata_CRUD(cur, conn, changehistory_data)
-        #
-        # elif st.session_state.position == "????":
-        #     Sales_Dashboard_tab, Sales_CRUD_tab = st.tabs(["Sales Dashboard", "Sales"])
-        #     with Sales_Dashboard_tab:
-        #         dashboard(salesyear, salesperson, cur)
-        #     with Sales_CRUD_tab:
-        #         Sales_CRUD(cur, conn, salesperson, sales_data, display_sales)
 
 # Run main function
 if __name__ == "__main__": main()
