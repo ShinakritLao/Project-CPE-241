@@ -16,11 +16,15 @@ def dashboard(salesyear, salesperson, cur):
     with col1:
         DropdownSalesName = st.selectbox("Select Sales", salesperson)
     with col2:
-        DropdownYears = st.selectbox("Select Years", salesyear)
+        DropdownYears = st.selectbox("Select Year", salesyear)
 
     # Display header with selected Sales Name and Year
     if DropdownSalesName != "Sales ID" and DropdownYears != "Year":
-        st.header(f"({DropdownSalesName}, {DropdownYears})")
+        cur.execute("SELECT salesname FROM salesperson WHERE salespersonid = %s", (DropdownSalesName,))
+        result = cur.fetchone()
+        sales_name = result[0] if result else "Unknown Salesperson"
+        st.header(f"{sales_name}, {DropdownYears}")
+        # st.header(f"({DropdownSalesName}, {DropdownYears})")
     else:
         st.header("SALES")
 
