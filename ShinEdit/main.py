@@ -50,6 +50,7 @@ changehistory_data = get_changehistorydata(cur)
 from GetData.debtordata import get_display_debtor
 from GetData.kpidata import get_display_kpi
 from GetData.salesdata import get_display_sales
+from GetData.debtordata import get_display_debtor
 from GetData.salespersondata import get_salespersondata
 from GetData.salesproductdata import get_display_salesproduct
 from GetData.usersdata import get_display_users
@@ -66,6 +67,9 @@ from Web_Page.login_page import login
 from Web_Page.dashboard_page import dashboard
 from Web_Page.sales_CRUD_page import Sales_CRUD
 from Web_Page.kpi_CRUD_page import KPI_CRUD
+from Web_Page.debtor_CRUD_page import Debtor_CRUD
+from Web_Page.salesproduct_CRUD_page import SalesProduct_CRUD
+from Web_Page.salesperson_CRUD_page import SalesPerson_CRUD
 from Web_Page.restoredata_page import restoredata_CRUD
 from Web_Page.users_page import show_user_sidebar
 from Web_Page.users_page import edit_user_page
@@ -95,8 +99,8 @@ def main():
         st.stop()
 
     # Create tabs
-    Sales_Dashboard_tab, Sales_CRUD_tab, KPI_CRUD_tab, Users_tab, Restore_CRUD_tab = (
-        st.tabs(["Sales Dashboard", "Sales", "KPI", "Users", "History"]))
+    Sales_Dashboard_tab, Sales_CRUD_tab, KPI_CRUD_tab, Debtor_CRUD_tab, SalesProduct_CRUD_tab, SalesPerson_CRUD_tab,  Users_tab, Restore_CRUD_tab = (
+        st.tabs(["Sales Dashboard", "Sales", "KPI", "Debtor", "Sales Product", "Sales Person" , "Users", "History"]))
 
     with Sales_Dashboard_tab:
         dashboard(salesyear, salesperson, cur)
@@ -112,6 +116,15 @@ def main():
 
     with Restore_CRUD_tab:
         restoredata_CRUD(cur, conn, changehistory_data)
+
+    with Debtor_CRUD_tab:
+        Debtor_CRUD(cur, conn, debtor_data, display_debtor)
+
+    with SalesProduct_CRUD_tab:
+        SalesProduct_CRUD(cur, conn, salesperson ,salesproduct_data, display_salesproduct)
+
+    with SalesPerson_CRUD_tab:
+        SalesPerson_CRUD(cur, conn, salesperson_data, display_salespersondata)
 
         # # Based on user position (role), show specific pages
         # if st.session_state.position == "???":
