@@ -23,11 +23,10 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
         else:
             details = get_salespersondata(cur)  # You can add filtering logic here if needed
             displaying = details
-
-            #looking for how to done it
-            #details = get_details(cur, 'SalesPerson', filters)
-            #selected_details = st.selectbox("Select Details", details, index=0, key="filter_details_salesperson")
-            #displaying = get_one_salespersondata(cur, filters, selected_details)
+            # looking for how to done it
+            # details = get_details(cur, 'SalesPerson', filters)
+            # selected_details = st.selectbox("Select Details", details, index=0, key="filter_details_salesperson")
+            # displaying = get_one_salespersondata(cur, filters, selected_details)
 
     # ------------------ DISPLAY DATA & SET UP ------------------
     st.dataframe(displaying)
@@ -64,13 +63,13 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
                     "position": position,
                     "phone_number": phone_number
                 }
-                st.session_state["confirm_add_sp"] = True
+                st.session_state["confirm_add_salp"] = True
 
-        if st.session_state.get("confirm_add_sp", False):
+        if st.session_state.get("confirm_add_salp", False):
             st.warning("⚡ **Confirm Adding New Sales Person Record?**")
             col1, col2 = st.columns(2)
             with col2:
-                if st.button("✅ Confirm Add", use_container_width=True, key="confirm_sp_add_btn"):
+                if st.button("✅ Confirm Add", use_container_width=True, key="confirm_salp_add_btn"):
                     try:
                         data = st.session_state["new_salesperson_data"]
                         cur.execute(
@@ -110,7 +109,7 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
         with st.form("Update Sales Person Record"):
             sales_name = st.text_input("Sales Name", value=update_data['SalesName'].iloc[0])
             dob = st.date_input("Date of Birth", value=pd.to_datetime(update_data['DOB'].iloc[0]))
-            gender = st.selectbox("Gender", ["Male", "Female", "Other"], index=["Male", "Female", "Other"].index(update_data['Gender'].iloc[0]))
+            gender = st.selectbox("Gender", ["Male", "Female"], index=["Male", "Female"].index(update_data['Gender'].iloc[0]))
             position = st.text_input("Position", value=update_data['Position'].iloc[0])
             phone_number = st.text_input("Phone Number", value=update_data['PhoneNumber'].iloc[0])
             update_submitted = st.form_submit_button("Update Sales Person Record")
@@ -131,7 +130,7 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
             st.warning("⚡ **Confirm Updating Sales Person Record?**")
             col1, col2 = st.columns(2)
             with col2:
-                if st.button("✅ Confirm Update", use_container_width=True, key="confirm_sp_update_btn"):
+                if st.button("✅ Confirm Update", use_container_width=True, key="confirm_salp_update_btn"):
                     try:
                         data = st.session_state["update_salesperson_data"]
                         current = data["current"]
@@ -156,7 +155,7 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
                         st.session_state["confirm_update_sp"] = False
                         st.rerun()
             with col1:
-                if st.button("❌ Cancel Update", use_container_width=True, key="cancel_sp_update_btn"):
+                if st.button("❌ Cancel Update", use_container_width=True, key="cancel_salp_update_btn"):
                     st.session_state["confirm_update_sp"] = False
                     st.rerun()
 
