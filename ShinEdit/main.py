@@ -38,6 +38,7 @@ from GetData.debtordata import get_debtordata
 from GetData.salesproductdata import get_salesproductdata
 from GetData.usersdata import get_usersdata
 from GetData.changehistorydata import get_changehistorydata
+from GetData.newproductdata import get_newproductdata
 
 sales_data = get_salesdata(cur)
 product_data = get_productdata(cur)
@@ -47,6 +48,7 @@ debtor_data = get_debtordata(cur)
 salesproduct_data = get_salesproductdata(cur)
 users_data = get_usersdata(cur)
 changehistory_data = get_changehistorydata(cur)
+newproduct_data = get_newproductdata(cur)
 
 # Get display function
 from GetData.debtordata import get_display_debtor
@@ -56,6 +58,7 @@ from GetData.debtordata import get_display_debtor
 from GetData.salespersondata import get_salespersondata
 from GetData.salesproductdata import get_display_salesproduct
 from GetData.usersdata import get_display_users
+from GetData.newproductdata import get_display_newproduct
 
 display_debtor = get_display_debtor(cur)
 display_kpi = get_display_kpi(cur)
@@ -63,6 +66,7 @@ display_sales = get_display_sales(cur)
 display_salespersondata = get_salespersondata(cur)
 display_salesproduct = get_display_salesproduct(cur)
 display_users = get_display_users(cur)
+display_product = get_display_newproduct(cur)
 
 # Main function
 from Web_Page.login_page import login
@@ -76,6 +80,7 @@ from Web_Page.restoredata_page import restoredata_CRUD
 from Web_Page.users_page import show_user_sidebar
 from Web_Page.users_page import edit_user_page
 from Web_Page.users_all_page import users_all_page
+from Web_Page.product_CRUD_page import Product_CRUD
 
 # Main function set up Streamlit
 def main():
@@ -101,8 +106,8 @@ def main():
         st.stop()
 
     # Create tabs
-    Sales_Dashboard_tab, Sales_CRUD_tab, KPI_CRUD_tab, Debtor_CRUD_tab, SalesProduct_CRUD_tab, SalesPerson_CRUD_tab,  Users_tab, Restore_CRUD_tab = (
-        st.tabs(["Sales Dashboard", "Sales", "KPI", "Debtor", "Sales Product", "Sales Person" , "Users", "History"]))
+    Sales_Dashboard_tab, Sales_CRUD_tab, KPI_CRUD_tab, Debtor_CRUD_tab, SalesProduct_CRUD_tab, SalesPerson_CRUD_tab, Product_CRUD_tab,  Users_tab, Restore_CRUD_tab = (
+        st.tabs(["Sales Dashboard", "Sales", "KPI", "Debtor", "Sales Product", "Sales Person" , "Product", "Users", "History"]))
 
     with Sales_Dashboard_tab:
         dashboard(salesyear, salesperson, cur)
@@ -127,6 +132,9 @@ def main():
 
     with SalesPerson_CRUD_tab:
         SalesPerson_CRUD(cur, conn, salesperson_data, display_salespersondata)
+
+    with Product_CRUD_tab:
+        Product_CRUD(cur, conn, newproduct_data, display_product)
 
         # # Based on user position (role), show specific pages
         # if st.session_state.position == "???":

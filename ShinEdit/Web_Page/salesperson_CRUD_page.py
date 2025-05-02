@@ -193,6 +193,11 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
                         conn.commit()
 
                         history_update(cur, conn, "salesperson", data["id"], "salespersonid", "Delete", data["id"], "-")
+                        history_update(cur, conn, "salesperson", data["id"], "sales_name", "Delete", data["sales_name"], "-")
+                        history_update(cur, conn, "salesperson", data["id"], "dob", "Delete", data["dob"], "-")
+                        history_update(cur, conn, "salesperson", data["id"], "gender", "Delete", data["gender"], "-")
+                        history_update(cur, conn, "salesperson", data["id"], "position", "Delete", data["position"], "-")
+                        history_update(cur, conn, "salesperson", data["id"], "phone_number", "Delete", data["phone_number"], "-")
 
                         st.success("✅ Record deleted successfully!")
                     except Exception as e:

@@ -108,8 +108,7 @@ def Sales_CRUD(cur, conn, salesperson, all_data, display_data):
         st.dataframe(update_data)
 
         with st.form("Update Sales Record"):
-            update_salesperson = st.selectbox("Sales Person ID", salesperson,
-                                              index = salesperson.index(update_data['Sales Person ID'][0]))
+            update_salesperson = st.selectbox("Sales Person ID", salesperson,index = salesperson.index(update_data['Sales Person ID'][0]))
             update_quantity = st.number_input("Number of product", value = update_data['Quantity'][0])
             update_year = st.selectbox("Year", year, index = year.index(update_data['Year'][0]))
             update_month = st.selectbox("Month", month, index = month.index(update_data['Month'][0]))

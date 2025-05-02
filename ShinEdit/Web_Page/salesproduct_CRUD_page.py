@@ -26,7 +26,8 @@ def SalesProduct_CRUD(cur, conn, salesperson, all_data, display_data):
         else:
             details = get_details(cur, 'SalesProduct', filters)
             selected_details = st.selectbox("Select Details", details, index=0)
-            displaying = get_one_salesproductdata
+            displaying = get_one_salesproductdata(cur, filters, selected_details, filters, selected_details)
+
 
     # ------------------ DISPLAY DATA & SET UP ------------------
     st.dataframe(displaying)
