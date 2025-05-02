@@ -23,9 +23,11 @@ cur = conn.cursor()
 # Dropdown
 from DropdownInfo.sales import get_salesyear
 from DropdownInfo.salesperson import get_salesperson
+from DropdownInfo.product import get_product
 
 salesyear = get_salesyear(cur)
 salesperson = get_salesperson(cur)
+product = get_product(cur)
 
 # Get data
 from GetData.salesdata import get_salesdata
@@ -118,10 +120,10 @@ def main():
         restoredata_CRUD(cur, conn, changehistory_data)
 
     with Debtor_CRUD_tab:
-        Debtor_CRUD(cur, conn, debtor_data, display_debtor)
+        Debtor_CRUD(cur, conn, salesperson, product, debtor_data, display_debtor)
 
     with SalesProduct_CRUD_tab:
-        SalesProduct_CRUD(cur, conn, salesperson ,salesproduct_data, display_salesproduct)
+        SalesProduct_CRUD(cur, conn, product ,salesproduct_data, display_salesproduct)
 
     with SalesPerson_CRUD_tab:
         SalesPerson_CRUD(cur, conn, salesperson_data, display_salespersondata)

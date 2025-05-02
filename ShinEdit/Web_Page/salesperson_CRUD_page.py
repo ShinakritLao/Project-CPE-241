@@ -13,7 +13,7 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
     col1, col2 = st.columns(2)
 
     with col1:
-        filopt = ["Default", "SalesPersonID", "Position"]
+        filopt = ["Default", "DOB", "Gender", "Position"]
         filters = st.selectbox("Filter Search", filopt, index=0, key='Filter_SalesPerson')
 
     with col2:
@@ -23,6 +23,11 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
         else:
             details = get_salespersondata(cur)  # You can add filtering logic here if needed
             displaying = details
+
+            #looking for how to done it
+            #details = get_details(cur, 'SalesPerson', filters)
+            #selected_details = st.selectbox("Select Details", details, index=0, key="filter_details_salesperson")
+            #displaying = get_one_salespersondata(cur, filters, selected_details)
 
     # ------------------ DISPLAY DATA & SET UP ------------------
     st.dataframe(displaying)

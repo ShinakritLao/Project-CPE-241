@@ -7,14 +7,14 @@ from DropdownInfo.filtersearch import get_details
 from HistoryData.query_data import updatedata
 from HistoryData.changehistory_update import history_update
 
-def SalesProduct_CRUD(cur, conn, product_list, all_data, display_data):
+def SalesProduct_CRUD(cur, conn, salesperson, all_data, display_data):
     st.header("Sales Product Record")
 
     # ------------------ FILTER SEARCH ------------------
     col1, col2 = st.columns(2)
 
     with col1:
-        filopt = ["Default", "ProductID", "Status"]
+        filopt = ["Default", "Status"]
         filters = st.selectbox("Filter Search", filopt, index=0, key='Filter_SalesProduct')
 
     with col2:
@@ -33,7 +33,7 @@ def SalesProduct_CRUD(cur, conn, product_list, all_data, display_data):
     # ------------------ ADD RECORD ------------------
     with add_record:
         if len(all_data) == 0:
-            new_value = "SP001"
+            new_value = "S001"
         else:
             last_value = all_data['SalesID'].iloc[-1]
             prefix = ''.join(filter(str.isalpha, last_value))
@@ -44,11 +44,11 @@ def SalesProduct_CRUD(cur, conn, product_list, all_data, display_data):
         st.subheader("Add New Sales Product Record")
 
         with st.form("Add Sales Product Record"):
-            new_id = st.text_input("Sales Product ID", value=new_value, disabled=True)
-            product_id = st.selectbox("Product ID", product_list)
+            new_id = st.text_input("Sales ID", value=new_value, disabled=True)
+            product_id = st.selectbox("Product ID", salesperson)
             total_sales = st.number_input("Total Sales", min_value=0)
             total_cost = st.number_input("Total Cost", min_value=0)
-            status = st.selectbox("Status", ["Available", "Out of Stock", "Discontinued"])
+            status = st.selectbox("Status", ["cancelled", "completed", "pending"])
             submitted = st.form_submit_button("Add Sales Product")
 
             if submitted:
@@ -65,7 +65,7 @@ def SalesProduct_CRUD(cur, conn, product_list, all_data, display_data):
             st.warning("⚡ **Confirm Adding New Sales Product Record?**")
             col1, col2 = st.columns(2)
             with col2:
-                if st.button("✅ Confirm Add", use_container_width=True, key="confirm_sp_add_btn"):
+                if st.button("✅ Confirm Add", use_container_width=True, key="confirm_spo_add_btn"):
                     try:
                         data = st.session_state["new_salesproduct_data"]
                         cur.execute(
@@ -88,7 +88,7 @@ def SalesProduct_CRUD(cur, conn, product_list, all_data, display_data):
                         st.session_state["confirm_add_sp"] = False
                         st.rerun()
             with col1:
-                if st.button("❌ Cancel Add", use_container_width=True, key="cancel_sp_add_btn"):
+                if st.button("❌ Cancel Add", use_container_width=True, key="cancel_spo_add_btn"):
                     st.session_state["confirm_add_sp"] = False
                     st.rerun()
 
@@ -104,11 +104,10 @@ def SalesProduct_CRUD(cur, conn, product_list, all_data, display_data):
         with st.form("Update Sales Product Record"):
             product_id = update_data['Product ID'][0]
 
-            # Check if product_id is in product_list, if not use the first item in product_list
-            if product_id not in product_list:
-                product_id = product_list[0]
+            if product_id not in salesperson:
+                product_id = salesperson[0]
 
-            product_id = st.selectbox("Product ID", product_list, index=product_list.index(product_id))
+            product_id = st.selectbox("Product ID", salesperson, index=salesperson.index(product_id))
             total_sales = st.number_input("Total Sales", value=update_data['Total Sales'][0])
             total_cost = st.number_input("Total Cost", value=update_data['Total Cost'][0])
             status = st.selectbox("Status", ["cancelled", "pending", "completed"],
