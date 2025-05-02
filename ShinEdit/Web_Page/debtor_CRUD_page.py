@@ -150,13 +150,13 @@ def Debtor_CRUD(cur, conn, salesperson, product_list, all_data, display_data):
                         current = data["current"]
 
                         if data["companyname"] != current['Company Name']:
-                            updatedata(cur, conn, 'debtor', data["debtorid"], 'companyname', current['CompanyName'], data["companyname"])
+                            updatedata(cur, conn, 'debtor', data["debtorid"], 'companyname', current['Company Name'], data["companyname"])
 
                         if data["salespersonid"] != current['Sales Person ID']:
-                            updatedata(cur, conn, 'debtor', data["debtorid"], 'salespersonid', current['SalespersonID'], data["salespersonid"])
+                            updatedata(cur, conn, 'debtor', data["debtorid"], 'salespersonid', current['Sales Person ID'], data["salespersonid"])
 
                         if data["productid"] != current['Product ID']:
-                            updatedata(cur, conn, 'debtor', data["debtorid"], 'productid', current['ProductID'], data["productid"])
+                            updatedata(cur, conn, 'debtor', data["debtorid"], 'productid', current['Product ID'], data["productid"])
 
                         if data["price"] != current['Price']:
                             updatedata(cur, conn, 'debtor', data["debtorid"], 'price', current['Price'], data["price"])
