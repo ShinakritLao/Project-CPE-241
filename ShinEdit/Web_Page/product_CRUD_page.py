@@ -182,13 +182,11 @@ def Product_CRUD(cur, conn, all_data, display_data):
                         cur.execute("DELETE FROM product WHERE productid = %s", (data["id"],))
                         conn.commit()
 
-                        for field in data:
-                            if field != "id":
-                                history_update(cur, conn, "productid", data["id"], field, "Delete", data[field], "-")
-                                history_update(cur, conn, "productname", data["id"], field, "Delete", data[field], "-")
-                                history_update(cur, conn, "instock", data["id"], field, "Delete", data[field], "-")
-                                history_update(cur, conn, "status", data["id"], field, "Delete", data[field], "-")
-                                history_update(cur, conn, "importloc", data["id"], field, "Delete", data[field], "-")
+                        history_update(cur, conn, "product", data["id"], "productid", "Delete", data["id"], "-")
+                        history_update(cur, conn, "product", data["id"], "productname", "Delete", data["name"], "-")
+                        history_update(cur, conn, "product", data["id"], "instock", "Delete", data['stock'], "-")
+                        history_update(cur, conn, "product", data["id"], "status", "Delete", data['status'], "-")
+                        history_update(cur, conn, "product", data["id"], "importloc", "Delete", data['importloc'], "-")
 
                         st.success("✅ Product deleted successfully!")
                     except Exception as e:
