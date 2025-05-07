@@ -20,11 +20,11 @@ def restoredata_CRUD(cur, conn, changehistory_data):
 
     with col1:
         filopt = ["Default", "Username", "Table", "Action"]
-
-        if filopt == 'Table':
-            filopt = "Selected_Table"
-
         filters = st.selectbox("Filter Search", filopt, index = 0)
+
+        if filters == 'Table':
+            filters = "Selected_Table"
+
     with col2:
         if filters == 'Default':
             st.selectbox("Select Details", options = [], disabled = True, key = 'filters_history')

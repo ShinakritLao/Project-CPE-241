@@ -16,7 +16,7 @@ def get_one_salespersondata(cur, loc, subloc):
     cur.execute(f"""
         SELECT SalesPersonID, SalesName, DOB, Gender, Position, PhoneNumber 
         FROM SalesPerson
-        WHERE {loc} = %s
+        WHERE {loc} = %s OR {loc} LIKE '%%{subloc}%%'
         ORDER BY SalesPersonID;
     """, (subloc,))
 

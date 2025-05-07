@@ -108,7 +108,7 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
         with st.form("Update Sales Person Record"):
             sales_name = st.text_input("Sales Name", value=update_data['SalesName'].iloc[0])
             dob = st.date_input("Date of Birth", value=pd.to_datetime(update_data['DOB'].iloc[0]))
-            gender = st.selectbox("Gender", ["Male", "Female"], index=["Male", "Female"].index(update_data['Gender'].iloc[0]))
+            gender = st.selectbox("Gender", ["Male", "Female", "Other"], index=["Male", "Female", "Other"].index(update_data['Gender'].iloc[0]))
             position = st.text_input("Position", value=update_data['Position'].iloc[0])
             phone_number = st.text_input("Phone Number", value=update_data['PhoneNumber'].iloc[0])
             update_submitted = st.form_submit_button("Update Sales Person Record")

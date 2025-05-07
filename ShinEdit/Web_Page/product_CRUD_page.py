@@ -16,6 +16,9 @@ def Product_CRUD(cur, conn, all_data, display_data):
         filopt = ["Default", "Status", "Import Location"]
         filters = st.selectbox("Filter Search", filopt, index=0, key='Filter_Product')
 
+        if filters == 'Import Location':
+            filters = 'ImportLoc'
+
     with col2:
         if filters == 'Default':
             st.selectbox("Select Details", options=[], disabled=True, key='Details_Product')

@@ -15,11 +15,10 @@ def Debtor_CRUD(cur, conn, salesperson, product_list, all_data, display_data):
 
     with col1:
         filopt = ["Default", "Company Name", "Status"]
-
-        if filopt == 'Company Name':
-            filopt = "CompanyName"
-
         filters = st.selectbox("Filter Search", filopt, index = 0)
+
+        if filters == 'Company Name':
+            filters = 'CompanyName'
 
     with col2:
         if filters == 'Default':
@@ -27,7 +26,7 @@ def Debtor_CRUD(cur, conn, salesperson, product_list, all_data, display_data):
             displaying = display_data
         else:
             details = get_details(cur, 'Debtor', filters)
-            selected_details = st.selectbox("Select Details", details, index=0, key="filter_details_select")
+            selected_details = st.selectbox("Select Details", details, index=0, key="filter_details_deptor")
             displaying = get_one_debtordata(cur, filters, selected_details)
 
     # ------------------ DISPLAY DATA & SET UP ------------------
