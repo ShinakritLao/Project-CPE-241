@@ -36,7 +36,7 @@ def get_display_debtor(cur):
     # SQL part: Get data from the table in database
     cur.execute("""
             SELECT DebtorID, CompanyName, Debtor.SalesPersonID, SalesName, Debtor.ProductID, ProductName,
-            Price, Debt, Paid, Date, Status FROM Debtor 
+            Price, Debt, Paid, Debtor.Date, Debtor.Status FROM Debtor 
             JOIN SalesPerson ON Debtor.SalesPersonID = SalesPerson.SalesPersonID
             JOIN Product ON Debtor.ProductID = Product.ProductID
             ORDER BY DebtorID;
@@ -54,7 +54,7 @@ def get_one_debtordata(cur, loc, subloc):
     # SQL part: Get data from the table in database
     cur.execute(f"""
                 SELECT DebtorID, CompanyName, Debtor.SalesPersonID, SalesName, Debtor.ProductID, ProductName, Price, Debt, 
-                Paid, Date, Status FROM Debtor JOIN SalesPerson ON Debtor.SalesPersonID = SalesPerson.SalesPersonID
+                Paid, Debtor.Date, Debtor.Status FROM Debtor JOIN SalesPerson ON Debtor.SalesPersonID = SalesPerson.SalesPersonID
                 JOIN Product ON Debtor.ProductID = Product.ProductID 
                 WHERE Debtor.{loc} = '{subloc}' ORDER BY DebtorID;
                 """, (subloc,))

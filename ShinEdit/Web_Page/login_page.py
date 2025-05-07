@@ -49,11 +49,13 @@ def login(users_data,salesperson_data, conn):
                             cur = conn.cursor()
                             cur.execute("UPDATE Users SET Status = %s WHERE Username = %s", ("Active", username))
                             conn.commit()
-                        # Get user position from salesperson data
-                        position = salesperson_data[salesperson_data["SalesPersonID"] ==users_data[users_data["Username"] == username]["SalesPersonID"].values[0]]["Position"].values[0]
+                            # Get user position from salesperson data
+                            position = salesperson_data[salesperson_data["SalesPersonID"] ==
+                                                        users_data[users_data["Username"] == username][
+                                                            "SalesPersonID"].values[0]]["Position"].values[0]
 
-                        # Set user role in session
-                        st.session_state.role = get_user_role(position)
+                            # Set user role in session
+                            st.session_state.role = get_user_role(position)
                         st.session_state.logged_in = True
                         st.session_state.username = username
                         st.success("Login successful!")

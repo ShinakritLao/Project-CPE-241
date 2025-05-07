@@ -7,8 +7,9 @@ from HistoryData.changehistory_update import history_update
 
 def get_primary(table):
 
-    if table == 'KPI' or 'kpi' : pri = table + "_id"
-    elif table == 'Users' or 'users' : pri = "username"
+    if table == 'kpi' : pri = table + "_id"
+    elif table == 'users' : pri = "username"
+    elif table == 'salesproduct' : pri = "salesid"
     else: pri = table + "id"
 
     return pri
