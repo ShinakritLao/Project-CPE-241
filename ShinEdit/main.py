@@ -118,41 +118,20 @@ def main():
     with KPI_CRUD_tab:
         KPI_CRUD(cur, conn, salesperson, kpi_data, display_kpi)
 
+    with Debtor_CRUD_tab:
+        Debtor_CRUD(cur, conn, salesperson, product, debtor_data, display_debtor)
+
+    with SalesProduct_CRUD_tab:
+        SalesProduct_CRUD(cur, conn, salesperson, salesproduct_data, display_salesproduct)
+
+    with SalesPerson_CRUD_tab:
+        SalesPerson_CRUD(cur, conn, salesperson_data, display_salespersondata)
+
     with Users_tab:
         users_all_page(cur, conn, users_data, display_users)
 
     with Restore_CRUD_tab:
         restoredata_CRUD(cur, conn, changehistory_data)
-
-    with Debtor_CRUD_tab:
-        Debtor_CRUD(cur, conn, salesperson, product, debtor_data, display_debtor)
-
-    with SalesProduct_CRUD_tab:
-        SalesProduct_CRUD(cur, conn, product ,salesproduct_data, display_salesproduct)
-
-    with SalesPerson_CRUD_tab:
-        SalesPerson_CRUD(cur, conn, salesperson_data, display_salespersondata)
-
-    with Product_CRUD_tab:
-        Product_CRUD(cur, conn, newproduct_data, display_product)
-
-        # # Based on user position (role), show specific pages
-        # if st.session_state.position == "???":
-        #     Sales_Dashboard_tab, Sales_CRUD_tab, Restore_CRUD_tab = st.tabs(
-        #         ["Sales Dashboard", "Sales", "Restore Data"])
-        #     with Sales_Dashboard_tab:
-        #         dashboard(salesyear, salesperson, cur)
-        #     with Sales_CRUD_tab:
-        #         Sales_CRUD(cur, conn, salesperson, sales_data, display_sales)
-        #     with Restore_CRUD_tab:
-        #         restoredata_CRUD(cur, conn, changehistory_data)
-        #
-        # elif st.session_state.position == "????":
-        #     Sales_Dashboard_tab, Sales_CRUD_tab = st.tabs(["Sales Dashboard", "Sales"])
-        #     with Sales_Dashboard_tab:
-        #         dashboard(salesyear, salesperson, cur)
-        #     with Sales_CRUD_tab:
-        #         Sales_CRUD(cur, conn, salesperson, sales_data, display_sales)
 
 # Run main function
 if __name__ == "__main__": main()

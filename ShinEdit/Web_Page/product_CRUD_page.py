@@ -13,7 +13,7 @@ def Product_CRUD(cur, conn, all_data, display_data):
     col1, col2 = st.columns(2)
 
     with col1:
-        filopt = ["Default", "ProductID", "Status", "ImportLoc"]
+        filopt = ["Default", "Status", "Import Location"]
         filters = st.selectbox("Filter Search", filopt, index=0, key='Filter_Product')
 
     with col2:
