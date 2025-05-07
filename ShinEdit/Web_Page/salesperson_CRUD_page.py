@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 
 from GetData.salespersondata import get_salespersondata
+from GetData.salespersondata import get_one_salespersondata
+from DropdownInfo.filtersearch import get_details
 from HistoryData.query_data import updatedata
 from HistoryData.changehistory_update import history_update
 
@@ -21,12 +23,9 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
             st.selectbox("Select Details", options=[], disabled=True, key='Details_SalesPerson')
             displaying = display_data
         else:
-            details = get_salespersondata(cur)  # You can add filtering logic here if needed
-            displaying = details
-            # looking for how to done it
-            # details = get_details(cur, 'SalesPerson', filters)
-            # selected_details = st.selectbox("Select Details", details, index=0, key="filter_details_salesperson")
-            # displaying = get_one_salespersondata(cur, filters, selected_details)
+             details = get_details(cur, 'SalesPerson', filters)
+             selected_details = st.selectbox("Select Details", details, index=0, key="filter_details_salesperson")
+             displaying = get_one_salespersondata(cur, filters, selected_details)
 
     # ------------------ DISPLAY DATA & SET UP ------------------
     st.dataframe(displaying)
@@ -194,6 +193,11 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
                         conn.commit()
 
                         history_update(cur, conn, "salesperson", data["id"], "salespersonid", "Delete", data["id"], "-")
+                        history_update(cur, conn, "salesperson", data["id"], "sales_name", "Delete", data["sales_name"], "-")
+                        history_update(cur, conn, "salesperson", data["id"], "dob", "Delete", data["dob"], "-")
+                        history_update(cur, conn, "salesperson", data["id"], "gender", "Delete", data["gender"], "-")
+                        history_update(cur, conn, "salesperson", data["id"], "position", "Delete", data["position"], "-")
+                        history_update(cur, conn, "salesperson", data["id"], "phone_number", "Delete", data["phone_number"], "-")
 
                         st.success("✅ Record deleted successfully!")
                     except Exception as e:

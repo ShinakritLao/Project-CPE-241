@@ -154,13 +154,13 @@ def Debtor_CRUD(cur, conn, salesperson, product_list, all_data, display_data):
                         current = data["current"]
 
                         if data["companyname"] != current['Company Name']:
-                            updatedata(cur, conn, 'debtor', data["debtorid"], 'companyname', current['CompanyName'], data["companyname"])
+                            updatedata(cur, conn, 'debtor', data["debtorid"], 'companyname', current['Company Name'], data["companyname"])
 
                         if data["salespersonid"] != current['Sales Person ID']:
-                            updatedata(cur, conn, 'debtor', data["debtorid"], 'salespersonid', current['SalespersonID'], data["salespersonid"])
+                            updatedata(cur, conn, 'debtor', data["debtorid"], 'salespersonid', current['Sales Person ID'], data["salespersonid"])
 
                         if data["productid"] != current['Product ID']:
-                            updatedata(cur, conn, 'debtor', data["debtorid"], 'productid', current['ProductID'], data["productid"])
+                            updatedata(cur, conn, 'debtor', data["debtorid"], 'productid', current['Product ID'], data["productid"])
 
                         if data["price"] != current['Price']:
                             updatedata(cur, conn, 'debtor', data["debtorid"], 'price', current['Price'], data["price"])
@@ -223,15 +223,15 @@ def Debtor_CRUD(cur, conn, salesperson, product_list, all_data, display_data):
                         cur.execute("DELETE FROM debtor WHERE debtorid = %s", (data["id"],))
                         conn.commit()
 
-                        history_update(cur, conn, "debtor", data["id"], "debtorid", "Delete", "-", data["id"])
-                        history_update(cur, conn, "debtor", data["id"], "companyname", "Delete", "-", data["companyname"])
-                        history_update(cur, conn, "debtor", data["id"], "salespersonid", "Delete", "-", data["salespersonid"])
-                        history_update(cur, conn, "debtor", data["id"], "productid", "Delete", "-", data["productid"])
-                        history_update(cur, conn, "debtor", data["id"], "price", "Delete", "-", data["price"])
-                        history_update(cur, conn, "debtor", data["id"], "debt", "Delete", "-", data["debt"])
-                        history_update(cur, conn, "debtor", data["id"], "paid", "Delete", "-", data["paid"])
-                        history_update(cur, conn, "debtor", data["id"], "date", "Delete", "-", data["date"])
-                        history_update(cur, conn, "debtor", data["id"], "status", "Delete", "-", data["status"])
+                        history_update(cur, conn, "debtor", data["id"], "debtorid", "Delete",  data["id"], "-")
+                        history_update(cur, conn, "debtor", data["id"], "companyname", "Delete",  data["companyname"], "-")
+                        history_update(cur, conn, "debtor", data["id"], "salespersonid", "Delete",  data["salespersonid"], "-")
+                        history_update(cur, conn, "debtor", data["id"], "productid", "Delete",  data["productid"], "-")
+                        history_update(cur, conn, "debtor", data["id"], "price", "Delete",  data["price"], "-")
+                        history_update(cur, conn, "debtor", data["id"], "debt", "Delete",  data["debt"], "-")
+                        history_update(cur, conn, "debtor", data["id"], "paid", "Delete",  data["paid"], "-")
+                        history_update(cur, conn, "debtor", data["id"], "date", "Delete",  data["date"], "-")
+                        history_update(cur, conn, "debtor", data["id"], "status", "Delete", data["status"], "-")
 
                         st.success("✅ Debtor record deleted successfully!")
                     except Exception as e:

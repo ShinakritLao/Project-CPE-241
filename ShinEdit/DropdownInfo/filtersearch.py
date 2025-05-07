@@ -20,7 +20,7 @@ def get_restore(cur):
 
     # SQL part: Get data from the table in database
     cur.execute(f"SELECT ChangeID FROM history_change WHERE Action = 'Update' OR "
-                f"(Action = 'Delete' AND Location = Original_Data);")
+                f"(Action = 'Delete' AND Location = Original_Data) ORDER BY ChangeID;")
     result = cur.fetchall()
 
     # Convert the result to a Series
