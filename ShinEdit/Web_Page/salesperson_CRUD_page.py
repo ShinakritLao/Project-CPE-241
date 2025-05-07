@@ -13,7 +13,7 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
     col1, col2 = st.columns(2)
 
     with col1:
-        filopt = ["Default", "DOB", "Gender", "Position"]
+        filopt = ["Default", "Gender", "Position"]
         filters = st.selectbox("Filter Search", filopt, index=0, key='Filter_SalesPerson')
 
     with col2:
