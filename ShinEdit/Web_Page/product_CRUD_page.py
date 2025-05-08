@@ -49,7 +49,7 @@ def Product_CRUD(cur, conn, all_data, display_data):
             new_id = st.text_input("Product ID", value=new_value, disabled=True)
             product_name = st.text_input("Product Name")
             in_stock = st.number_input("In Stock Quantity", min_value=0)
-            status = st.selectbox("Status", ["profit", "loss", "break-even"])
+            status = st.selectbox("Status", ["Profit", "Loss", "Break-Even"])
             import_loc = st.text_input("Import Location")
             submitted = st.form_submit_button("Add Product")
 
@@ -102,7 +102,7 @@ def Product_CRUD(cur, conn, all_data, display_data):
         with st.form("Update Product Record"):
             update_name = st.text_input("Product Name", value=update_data['ProductName'][0])
             update_stock = st.number_input("In Stock", value=update_data['InStock'][0], min_value=0)
-            update_status = st.selectbox("Status", ["profit", "loss", "break-even"],index=["profit", "loss", "break-even"].index(update_data['Status'][0]))
+            update_status = st.selectbox("Status", ["Profit", "Loss", "Break-Even"],index=["Profit", "Loss", "Break-Even"].index(update_data['Status'][0]))
             update_import = st.text_input("Import Location", value=update_data['ImportLoc'][0])
 
             update_submitted = st.form_submit_button("Update Product")

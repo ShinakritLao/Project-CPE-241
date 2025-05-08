@@ -4,12 +4,12 @@ import numpy as np
 
 from HistoryData.changehistory_update import history_update
 
-def users_all_page(cur, conn, users_data, display_users):
+def users_all_page(cur, conn, display_users):
 
     # ------------------ DELETE USER ------------------
     st.subheader("Delete User")
 
-    selected_data = st.selectbox("Select Username to Delete", users_data['Username'].tolist())
+    selected_data = st.selectbox("Select Username to Delete", display_users['Username'].tolist())
     current_data = display_users.loc[display_users['Username'] == selected_data]
     st.dataframe(current_data)
 

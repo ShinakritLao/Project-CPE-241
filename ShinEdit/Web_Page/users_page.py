@@ -1,6 +1,9 @@
 import streamlit as st
 import pandas as pd
 
+from HistoryData.changehistory_update import history_update
+from HistoryData.query_data import updatedata
+
 def show_user_sidebar(users_data, salespersondata, username,conn):
     # Merge user table and salesperson table
     user_info = pd.merge(users_data, salespersondata, on="SalesPersonID", how="inner")
@@ -26,6 +29,8 @@ def show_user_sidebar(users_data, salespersondata, username,conn):
             cur.execute("UPDATE Users SET Status = %s WHERE Username = %s", ("Inactive", username))
             conn.commit()
 
+            history_update(cur, conn, "users", username, "status", "Logout", "Active", "Inactive")
+
             st.session_state.logged_in = False
             st.rerun()
 
@@ -43,23 +48,22 @@ def edit_user_page(users_data, salespersondata, username, conn):
 
     if st.button("Save Changes"):
         cur = conn.cursor()
-        cur.execute("""
-               UPDATE Users SET Nickname = %s, Email = %s
-               WHERE Username = %s
-           """, (new_nickname, new_email, username))
+
+        if new_nickname != current_user["Nickname"].values[0]:
+            updatedata(cur, conn, 'users', username, 'nickname', current_user["Nickname"].values[0], new_nickname)
+
+        if new_email != current_user["Email"].values[0]:
+            updatedata(cur, conn, 'users', username, 'email', current_user["Email"].values[0], new_email)
+
+        if new_phone != current_user["PhoneNumber"].values[0]:
+            updatedata(cur, conn, 'salesperson', current_user["SalesPersonID"].values[0], 'phonenumber', current_user["PhoneNumber"].values[0], new_phone)
 
         #check if new password enter or not
         if new_password.strip():
-            cur.execute("""
-                   UPDATE Users SET Password = %s
-                   WHERE Username = %s
-               """, (new_password, username))
+            cur.execute("UPDATE Users SET Password = %s WHERE Username = %s", (new_password, username))
+            conn.commit()
 
-        cur.execute("""
-            UPDATE SalesPerson SET PhoneNumber = %s
-            WHERE SalesPersonID = %s
-        """, (new_phone, current_user["SalesPersonID"].values[0]))
-        conn.commit()
+            history_update(cur, conn, "users", username, "password", "Update", "Hidden", "Hidden")
 
         st.success("Information updated successfully!")
         st.session_state.modify_page = False
@@ -68,4 +72,3 @@ def edit_user_page(users_data, salespersondata, username, conn):
     if st.button("Cancel"):
         st.session_state.modify_page = False
         st.rerun()
-

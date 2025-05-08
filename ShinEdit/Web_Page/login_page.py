@@ -2,16 +2,24 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
+from HistoryData.changehistory_update import history_update
+
 def createuser(conn, username, salespersonid, password, nickname, email):
     cur = conn.cursor()
     cur.execute("INSERT INTO users (username,salespersonid, password, nickname, email) VALUES (%s,%s, %s, %s, %s)",
         (username,salespersonid, password, nickname, email))
     conn.commit()
+    history_update(cur, conn, "users", username, "username", "Insert", "-", username)
+    history_update(cur, conn, "users", username, "salespersonid", "Insert", "-", salespersonid)
+    history_update(cur, conn, "users", username, "password", "Insert", "-", "Hidden")
+    history_update(cur, conn, "users", username, "nickname", "Insert", "-", nickname)
+    history_update(cur, conn, "users", username, "email", "Insert", "-", email)
 
 def reset_password(conn, username, new_password):
     cur = conn.cursor()
     cur.execute("UPDATE users SET password = %s WHERE username = %s", (new_password, username))
     conn.commit()
+    history_update(cur, conn, "users", username, "password", "Update", "Hidden", "Hidden")
 
 def get_user_role(position):
     position = position.lower()
@@ -48,6 +56,7 @@ def login(users_data,salesperson_data, conn):
                         if user_status != "Active":
                             cur = conn.cursor()
                             cur.execute("UPDATE Users SET Status = %s WHERE Username = %s", ("Active", username))
+                            history_update(cur, conn, "users", username, "status", "Login", "Inactive", "Active")
                             conn.commit()
                             # Get user position from salesperson data
                             position = salesperson_data[salesperson_data["SalesPersonID"] ==

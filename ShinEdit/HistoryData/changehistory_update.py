@@ -1,8 +1,8 @@
 from datetime import datetime
 from GetData.changehistorydata import get_changehistorydata
-from Web_Page.login_page import get_username
 
 def history_update(cur, conn, table, loc, subloc, act, ori, upd):
+    from Web_Page.login_page import get_username
 
     # Set up new primary key
     changehistorydata = get_changehistorydata(cur)

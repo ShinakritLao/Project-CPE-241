@@ -126,7 +126,7 @@ def main():
         with Debtor_CRUD_tab:
             Debtor_CRUD(cur, conn, salesperson, product, debtor_data, display_debtor)
         with Users_tab:
-            users_all_page(cur, conn, users_data, display_users)
+            users_all_page(cur, conn, display_users)
         with Restore_CRUD_tab:
             restoredata_CRUD(cur, conn, changehistory_data)
 
@@ -190,7 +190,7 @@ def main():
     #     Product_CRUD(cur, conn, product_data, display_product)
     #
     # with Users_tab:
-    #     users_all_page(cur, conn, users_data, display_users)
+    #     users_all_page(cur, conn, display_users)
     #
     # with Restore_CRUD_tab:
     #     restoredata_CRUD(cur, conn, changehistory_data)
