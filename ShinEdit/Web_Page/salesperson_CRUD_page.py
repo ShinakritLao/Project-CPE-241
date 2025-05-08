@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 
 from GetData.salespersondata import get_salespersondata
+from GetData.salespersondata import get_one_salespersondata
+from DropdownInfo.filtersearch import get_details
 from HistoryData.query_data import updatedata
 from HistoryData.changehistory_update import history_update
 
@@ -13,7 +15,7 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
     col1, col2 = st.columns(2)
 
     with col1:
-        filopt = ["Default", "SalesPersonID", "Position"]
+        filopt = ["Default", "Gender", "Position"]
         filters = st.selectbox("Filter Search", filopt, index=0, key='Filter_SalesPerson')
 
     with col2:
@@ -21,8 +23,9 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
             st.selectbox("Select Details", options=[], disabled=True, key='Details_SalesPerson')
             displaying = display_data
         else:
-            details = get_salespersondata(cur)  # You can add filtering logic here if needed
-            displaying = details
+             details = get_details(cur, 'SalesPerson', filters)
+             selected_details = st.selectbox("Select Details", details, index=0, key="filter_details_salesperson")
+             displaying = get_one_salespersondata(cur, filters, selected_details)
 
     # ------------------ DISPLAY DATA & SET UP ------------------
     st.dataframe(displaying)
@@ -59,13 +62,13 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
                     "position": position,
                     "phone_number": phone_number
                 }
-                st.session_state["confirm_add_sp"] = True
+                st.session_state["confirm_add_salp"] = True
 
-        if st.session_state.get("confirm_add_sp", False):
+        if st.session_state.get("confirm_add_salp", False):
             st.warning("⚡ **Confirm Adding New Sales Person Record?**")
             col1, col2 = st.columns(2)
             with col2:
-                if st.button("✅ Confirm Add", use_container_width=True, key="confirm_sp_add_btn"):
+                if st.button("✅ Confirm Add", use_container_width=True, key="confirm_salp_add_btn"):
                     try:
                         data = st.session_state["new_salesperson_data"]
                         cur.execute(
@@ -126,7 +129,7 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
             st.warning("⚡ **Confirm Updating Sales Person Record?**")
             col1, col2 = st.columns(2)
             with col2:
-                if st.button("✅ Confirm Update", use_container_width=True, key="confirm_sp_update_btn"):
+                if st.button("✅ Confirm Update", use_container_width=True, key="confirm_salp_update_btn"):
                     try:
                         data = st.session_state["update_salesperson_data"]
                         current = data["current"]
@@ -151,7 +154,7 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
                         st.session_state["confirm_update_sp"] = False
                         st.rerun()
             with col1:
-                if st.button("❌ Cancel Update", use_container_width=True, key="cancel_sp_update_btn"):
+                if st.button("❌ Cancel Update", use_container_width=True, key="cancel_salp_update_btn"):
                     st.session_state["confirm_update_sp"] = False
                     st.rerun()
 
@@ -190,6 +193,11 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
                         conn.commit()
 
                         history_update(cur, conn, "salesperson", data["id"], "salespersonid", "Delete", data["id"], "-")
+                        history_update(cur, conn, "salesperson", data["id"], "sales_name", "Delete", data["sales_name"], "-")
+                        history_update(cur, conn, "salesperson", data["id"], "dob", "Delete", data["dob"], "-")
+                        history_update(cur, conn, "salesperson", data["id"], "gender", "Delete", data["gender"], "-")
+                        history_update(cur, conn, "salesperson", data["id"], "position", "Delete", data["position"], "-")
+                        history_update(cur, conn, "salesperson", data["id"], "phone_number", "Delete", data["phone_number"], "-")
 
                         st.success("✅ Record deleted successfully!")
                     except Exception as e:

@@ -18,8 +18,11 @@ def Sales_CRUD(cur, conn, salesperson, all_data, display_data):
     col1, col2 = st.columns(2)
 
     with col1:
-        filopt = ["Default", "SalesPersonID", "Year", "Month"]
+        filopt = ["Default", "Sales Person ID", "Month", "Year"]
         filters = st.selectbox("Filter Search", filopt, index = 0, key = 'Filter_Sales')
+
+        if filters == 'Sales Person ID':
+            filters = "SalesPersonID"
 
     with col2:
         if filters == 'Default':
@@ -108,8 +111,7 @@ def Sales_CRUD(cur, conn, salesperson, all_data, display_data):
         st.dataframe(update_data)
 
         with st.form("Update Sales Record"):
-            update_salesperson = st.selectbox("Sales Person ID", salesperson,
-                                              index = salesperson.index(update_data['Sales Person ID'][0]))
+            update_salesperson = st.selectbox("Sales Person ID", salesperson,index = salesperson.index(update_data['Sales Person ID'][0]))
             update_quantity = st.number_input("Number of product", value = update_data['Quantity'][0])
             update_year = st.selectbox("Year", year, index = year.index(update_data['Year'][0]))
             update_month = st.selectbox("Month", month, index = month.index(update_data['Month'][0]))
