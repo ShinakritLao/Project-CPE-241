@@ -95,14 +95,14 @@ def main():
         st.stop()
 
     #show sidebar
-    show_user_sidebar(users_data, display_salespersondata, st.session_state.username,conn)
+    show_user_sidebar(users_data, display_salespersondata, st.session_state.username, conn)
 
     #check modify button
     if "modify_page" not in st.session_state:
         st.session_state.modify_page = False
 
     if st.session_state.modify_page:
-        edit_user_page(users_data, display_salespersondata, st.session_state.username,conn)
+        edit_user_page(users_data, display_salespersondata, st.session_state.username, conn)
         st.stop()
 
     role = st.session_state.get("role", "Representative")

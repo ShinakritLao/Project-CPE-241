@@ -25,8 +25,8 @@ def users_all_page(cur, conn, display_users):
                 try:
                     cur.execute("DELETE FROM Users WHERE Username = %s", (st.session_state["delete_username"],))
                     conn.commit()
-                    history_update(cur, conn, "Users", st.session_state["delete_username"], "-", "Delete", "-", "-")
-                    conn.commit()
+                    history_update(cur, conn, "users", st.session_state["delete_username"], "-", "Delete", "-", "-")
+
                     st.warning("✅ User deleted successfully!")
                 except Exception as e:
                     st.error(f"❌ Delete failed: {e}")
@@ -71,8 +71,8 @@ def users_all_page(cur, conn, display_users):
                         cur.execute(f"UPDATE Users SET Status = %s WHERE Username = %s",
                                     (database_status, st.session_state[f"username_{idx}"]))
                         conn.commit()
-                        history_update(cur, conn, "Users", st.session_state[f"username_{idx}"], "-", button_status, "-", "-")
-                        conn.commit()
+                        history_update(cur, conn, "users", st.session_state[f"username_{idx}"], "-", button_status, "-", "-")
+
                         st.warning(f"✅ User {button_status} successfully!")
                     except Exception as e:
                         st.error(f"❌ {button_status} failed: {e}")
