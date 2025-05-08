@@ -47,27 +47,57 @@ def edit_user_page(users_data, salespersondata, username, conn):
     new_password = st.text_input("New Password", type="password")
 
     if st.button("Save Changes"):
-        cur = conn.cursor()
+        st.session_state["edit_data"] = {
+            "username" : current_user['Username'].values[0],
+            "spid" : current_user['SalesPersonID'].values[0],
+            "nickname": new_nickname,
+            "email": new_email,
+            "phone": new_phone,
+            "password": new_password,
+            "current" : current_user.iloc[0]
+        }
+        st.session_state["confirm_edit"] = True
 
-        if new_nickname != current_user["Nickname"].values[0]:
-            updatedata(cur, conn, 'users', username, 'nickname', current_user["Nickname"].values[0], new_nickname)
+    if st.session_state.get("confirm_edit", False):
+        st.warning("⚡ **Confirm Editing User Information ?**")
+        col1, col2 = st.columns(2)
+        with col2:
+            if st.button("✅ Confirm Edit", use_container_width=True, key="confirm_edit_btn"):
+                try:
+                    data = st.session_state["edit_data"]
+                    current = data['current']
+                    cur = conn.cursor()
 
-        if new_email != current_user["Email"].values[0]:
-            updatedata(cur, conn, 'users', username, 'email', current_user["Email"].values[0], new_email)
+                    if data['nickname'] != current["Nickname"]:
+                        updatedata(cur, conn, 'users', data['username'], 'nickname', current["Nickname"], data['nickname'])
 
-        if new_phone != current_user["PhoneNumber"].values[0]:
-            updatedata(cur, conn, 'salesperson', current_user["SalesPersonID"].values[0], 'phonenumber', current_user["PhoneNumber"].values[0], new_phone)
+                    if new_email != current["Email"]:
+                        updatedata(cur, conn, 'users', data['username'], 'email', current["Email"], data['email'])
 
-        #check if new password enter or not
-        if new_password.strip():
-            cur.execute("UPDATE Users SET Password = %s WHERE Username = %s", (new_password, username))
-            conn.commit()
+                    if new_phone != current["PhoneNumber"]:
+                        updatedata(cur, conn, 'salesperson', data['spid'], 'phonenumber',
+                                       current["PhoneNumber"], data['phone'])
 
-            history_update(cur, conn, "users", username, "password", "Update", "Hidden", "Hidden")
+                    # check if new password enter or not
+                    if new_password.strip():
+                        cur.execute("UPDATE Users SET Password = %s WHERE Username = %s", (data['password'], data['username']))
+                        conn.commit()
+                        history_update(cur, conn, "users", data['username'], "password", "Update", "Hidden", "Hidden")
 
-        st.success("Information updated successfully!")
-        st.session_state.modify_page = False
-        st.rerun()
+                    st.success("Information updated successfully!")
+
+                except Exception as e:
+                    st.error(f"❌ Update failed: {e}")
+                    st.stop()
+
+                finally:
+                    st.session_state["confirm_edit"] = False
+                    st.rerun()
+
+        with col1:
+            if st.button("❌ Cancel Edit", use_container_width=True, key="cancel_edit_btn"):
+                st.session_state["confirm_edit"] = False
+                st.rerun()
 
     if st.button("Cancel"):
         st.session_state.modify_page = False
