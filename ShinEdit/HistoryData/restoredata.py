@@ -55,7 +55,7 @@ def restore_delete(cur, conn, table, loc):
     columns = get_columns(cur, table)
     values = get_deletedata(cur, table, loc)
 
-    # Convert into SQL friendly
+    # Convert into SQL friendly <3
     columns_sql = ', '.join(columns)
     values_sql = ', '.join(['%s'] * len(values))
 
