@@ -81,6 +81,7 @@ from Web_Page.users_page import show_user_sidebar
 from Web_Page.users_page import edit_user_page
 from Web_Page.users_all_page import users_all_page
 from Web_Page.product_CRUD_page import Product_CRUD
+from HistoryData.query_data import checkban
 
 # Main function set up Streamlit
 def main():
@@ -93,6 +94,8 @@ def main():
     # If not logged in, stop everything
     if not st.session_state.logged_in:
         st.stop()
+
+    checkban(cur, conn)
 
     #show sidebar
     show_user_sidebar(users_data, display_salespersondata, st.session_state.username, conn)
@@ -108,57 +111,53 @@ def main():
     role = st.session_state.get("role", "Representative")
 
     if role == "Chief":
-        Sales_Dashboard_tab, SalesPerson_CRUD_tab,Product_CRUD_tab, Sales_CRUD_tab, SalesProduct_CRUD_tab, KPI_CRUD_tab, Debtor_CRUD_tab, Users_tab, Restore_CRUD_tab = (
-            st.tabs(["Sales Dashboard", "Sales Person", "Product", "Sales", "Sales Product", "KPI", "Debtor", "Users", "History"]))
+        Sales_Dashboard_tab, SalesPerson_CRUD_tab, Sales_CRUD_tab, Product_CRUD_tab, SalesProduct_CRUD_tab, Debtor_CRUD_tab, KPI_CRUD_tab, Users_tab, Restore_CRUD_tab = (
+            st.tabs(["Sales Dashboard", "Sales Person", "Sales", "Product", "Sales Product", "Debtor", "KPI", "Users", "History"]))
 
         with Sales_Dashboard_tab:
             dashboard(salesyear, salesperson, cur)
         with SalesPerson_CRUD_tab:
             SalesPerson_CRUD(cur, conn, salesperson_data, display_salespersondata)
-        with Product_CRUD_tab:
-            Product_CRUD(cur, conn, product_data, display_product)
         with Sales_CRUD_tab:
             Sales_CRUD(cur, conn, salesperson, sales_data, display_sales)
+        with Product_CRUD_tab:
+            Product_CRUD(cur, conn, product_data, display_product)
         with SalesProduct_CRUD_tab:
             SalesProduct_CRUD(cur, conn, salesperson, salesproduct_data, display_salesproduct)
-        with KPI_CRUD_tab:
-            KPI_CRUD(cur, conn, salesperson, kpi_data, display_kpi)
         with Debtor_CRUD_tab:
             Debtor_CRUD(cur, conn, salesperson, product, debtor_data, display_debtor)
+        with KPI_CRUD_tab:
+            KPI_CRUD(cur, conn, salesperson, kpi_data, display_kpi)
         with Users_tab:
             users_all_page(cur, conn, display_users)
         with Restore_CRUD_tab:
             restoredata_CRUD(cur, conn, changehistory_data)
 
     elif role == "Manager":
-        Sales_Dashboard_tab, SalesPerson_CRUD_tab, Product_CRUD_tab, Sales_CRUD_tab, SalesProduct_CRUD_tab, KPI_CRUD_tab, Debtor_CRUD_tab = (
-            st.tabs(["Sales Dashboard", "Sales Person", "Product", "Sales", "Sales Product", "KPI", "Debtor"]))
+        SalesPerson_CRUD_tab, Sales_CRUD_tab, Product_CRUD_tab, SalesProduct_CRUD_tab, Debtor_CRUD_tab, KPI_CRUD_tab = (
+            st.tabs(["Sales Person", "Sales", "Product", "Sales Product", "Debtor", "KPI"]))
 
-        with Sales_Dashboard_tab:
-            dashboard(salesyear, salesperson, cur)
         with SalesPerson_CRUD_tab:
             SalesPerson_CRUD(cur, conn, salesperson_data, display_salespersondata)
-        with Product_CRUD_tab:
-            Product_CRUD(cur, conn, product_data, display_product)
         with Sales_CRUD_tab:
             Sales_CRUD(cur, conn, salesperson, sales_data, display_sales)
+        with Product_CRUD_tab:
+            Product_CRUD(cur, conn, product_data, display_product)
         with SalesProduct_CRUD_tab:
             SalesProduct_CRUD(cur, conn, salesperson, salesproduct_data, display_salesproduct)
-        with KPI_CRUD_tab:
-            KPI_CRUD(cur, conn, salesperson, kpi_data, display_kpi)
         with Debtor_CRUD_tab:
             Debtor_CRUD(cur, conn, salesperson, product, debtor_data, display_debtor)
+        with KPI_CRUD_tab:
+            KPI_CRUD(cur, conn, salesperson, kpi_data, display_kpi)
 
     elif role == "Representative":
-        Sales_Dashboard_tab, Product_CRUD_tab, Sales_CRUD_tab, SalesProduct_CRUD_tab, Debtor_CRUD_tab = (
-            st.tabs(["Sales Dashboard", "Product", "Sales", "Sales Product", "Debtor"]))
+        Sales_CRUD_tab, Product_CRUD_tab, SalesProduct_CRUD_tab, Debtor_CRUD_tab = (
+            st.tabs(["Sales", "Product", "Sales Product", "Debtor"]))
 
-        with Sales_Dashboard_tab:
-            dashboard(salesyear, salesperson, cur)
-        with Product_CRUD_tab:
-            Product_CRUD(cur, conn, product_data, display_product)
         with Sales_CRUD_tab:
             Sales_CRUD(cur, conn, salesperson, sales_data, display_sales)
+        with Product_CRUD_tab:
+            Product_CRUD(cur, conn, product_data, display_product)
         with SalesProduct_CRUD_tab:
             SalesProduct_CRUD(cur, conn, salesperson, salesproduct_data, display_salesproduct)
         with Debtor_CRUD_tab:

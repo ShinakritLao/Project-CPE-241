@@ -71,7 +71,8 @@ def users_all_page(cur, conn, display_users):
                         cur.execute(f"UPDATE Users SET Status = %s WHERE Username = %s",
                                     (database_status, st.session_state[f"username_{idx}"]))
                         conn.commit()
-                        history_update(cur, conn, "users", st.session_state[f"username_{idx}"], "-", button_status, "-", "-")
+                        history_update(cur, conn, "users", st.session_state[f"username_{idx}"], "status", button_status,
+                                       current_status, database_status)
 
                         st.warning(f"✅ User {button_status} successfully!")
                     except Exception as e:
