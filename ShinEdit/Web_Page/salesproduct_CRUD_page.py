@@ -8,6 +8,7 @@ from HistoryData.query_data import updatedata
 from HistoryData.changehistory_update import history_update
 from DropdownInfo.salesproduct import get_salesproduct_pd
 from DropdownInfo.salesproduct import get_salesproduct_s
+from DropdownInfo.filtersearch import get_details
 
 def SalesProduct_CRUD(cur, conn, product, all_data, display_data):
     st.header("Sales Product Record")
@@ -35,19 +36,10 @@ def SalesProduct_CRUD(cur, conn, product, all_data, display_data):
 
     # ------------------ ADD RECORD ------------------
     with add_record:
-        if len(all_data) == 0:
-            new_value = "S001"
-        else:
-            last_value = all_data['SalesID'].iloc[-1]
-            prefix = ''.join(filter(str.isalpha, last_value))
-            number = ''.join(filter(str.isdigit, last_value))
-            new_number = str(int(number) + 1).zfill(len(number))
-            new_value = prefix + new_number
-
         st.subheader("Add New Sales Product Record")
 
         with st.form("Add Sales Product Record"):
-            new_id = st.text_input("Sales ID", value=new_value)
+            new_id = st.selectbox("Sales ID", all_data['SalesID'].tolist(), index = len(all_data) - 1)
             product_id = st.selectbox("Product ID", product)
             total_sales = st.number_input("Total Sales", min_value=0)
             total_cost = st.number_input("Total Cost", min_value=0)
@@ -56,8 +48,7 @@ def SalesProduct_CRUD(cur, conn, product, all_data, display_data):
 
             if submitted:
                 st.session_state["new_salesproduct_data"] = {
-                    "id": new_id,
-                    "product_id": product_id,
+                    "id": (new_id, product_id),
                     "total_sales": total_sales,
                     "total_cost": total_cost,
                     "status": status
@@ -73,12 +64,12 @@ def SalesProduct_CRUD(cur, conn, product, all_data, display_data):
                         data = st.session_state["new_salesproduct_data"]
                         cur.execute(
                             "INSERT INTO salesproduct (salesid, productid, totalsales, totalcost, status) VALUES (%s, %s, %s, %s, %s)",
-                            (data["id"], data["product_id"], data["total_sales"], data["total_cost"], data["status"])
+                            (data["id"][0], data["id"][1], data["total_sales"], data["total_cost"], data["status"])
                         )
                         conn.commit()
 
-                        history_update(cur, conn, "salesproduct", data["id"], "salesid", "Insert", "-", data["id"])
-                        history_update(cur, conn, "salesproduct", data["id"], "productid", "Insert", "-", data["product_id"])
+                        history_update(cur, conn, "salesproduct", data["id"], "salesid", "Insert", "-", data["id"][0])
+                        history_update(cur, conn, "salesproduct", data["id"], "productid", "Insert", "-", data["id"][1])
                         history_update(cur, conn, "salesproduct", data["id"], "totalsales", "Insert", "-", data["total_sales"])
                         history_update(cur, conn, "salesproduct", data["id"], "totalcost", "Insert", "-", data["total_cost"])
                         history_update(cur, conn, "salesproduct", data["id"], "status", "Insert", "-", data["status"])
@@ -116,6 +107,9 @@ def SalesProduct_CRUD(cur, conn, product, all_data, display_data):
                 if product_id not in product:
                     product_id = product[0]
 
+                sid = get_details(cur, 'Sales', 'SalesID')
+
+                sales_id = st.selectbox("Sales ID", sid, index = sid.index(selected_update))
                 product_id = st.selectbox("Product ID", product, index=product.index(product_id))
                 total_sales = st.number_input("Total Sales", value=update_data['Total Sales'][0])
                 total_cost = st.number_input("Total Cost", value=update_data['Total Cost'][0])
@@ -126,7 +120,8 @@ def SalesProduct_CRUD(cur, conn, product, all_data, display_data):
 
                 if update_submitted:
                     st.session_state["update_salesproduct_data"] = {
-                        "salesid": selected_update,
+                        "id" : (selected_update, product_id),
+                        "salesid": sales_id,
                         "product_id": product_id,
                         "total_sales": total_sales,
                         "total_cost": total_cost,
@@ -144,14 +139,16 @@ def SalesProduct_CRUD(cur, conn, product, all_data, display_data):
                             data = st.session_state["update_salesproduct_data"]
                             current = data["current"]
 
+                            if data["salesid"] != current['Sales ID']:
+                                updatedata(cur, conn, 'salesproduct', data["id"], 'salesid', current['Sales ID'], data["product_id"])
                             if data["product_id"] != current['Product ID']:
-                                updatedata(cur, conn, 'salesproduct', data["salesid"], 'productid', current['Product ID'], data["product_id"])
+                                updatedata(cur, conn, 'salesproduct', data["id"], 'productid', current['Product ID'], data["product_id"])
                             if data["total_sales"] != current['Total Sales']:
-                                updatedata(cur, conn, 'salesproduct', data["salesid"], 'totalsales', current['Total Sales'], data["total_sales"])
+                                updatedata(cur, conn, 'salesproduct', data["id"], 'totalsales', current['Total Sales'], data["total_sales"])
                             if data["total_cost"] != current['Total Cost']:
-                                updatedata(cur, conn, 'salesproduct', data["salesid"], 'totalcost', current['Total Cost'], data["total_cost"])
+                                updatedata(cur, conn, 'salesproduct', data["id"], 'totalcost', current['Total Cost'], data["total_cost"])
                             if data["status"] != current['Status']:
-                                updatedata(cur, conn, 'salesproduct', data["salesid"], 'status', current['Status'], data["status"])
+                                updatedata(cur, conn, 'salesproduct', data["id"], 'status', current['Status'], data["status"])
 
                             conn.commit()
                             st.success("✅ Record updated successfully!")
@@ -183,7 +180,7 @@ def SalesProduct_CRUD(cur, conn, product, all_data, display_data):
 
             if st.button("Delete Record", key="delete_sp_btn"):
                 st.session_state["delete_salesproduct_data"] = {
-                    "id": selected_delete,
+                    "id": (selected_delete, delete_data['Product ID'][0]),
                     "product_id": delete_data['Product ID'][0],
                     "total_sales": delete_data['Total Sales'][0],
                     "total_cost": delete_data['Total Cost'][0],
@@ -199,10 +196,11 @@ def SalesProduct_CRUD(cur, conn, product, all_data, display_data):
                         try:
                             data = st.session_state["delete_salesproduct_data"]
 
-                            cur.execute("DELETE FROM salesproduct WHERE salesid = %s", (data["id"],))
+                            cur.execute("DELETE FROM salesproduct WHERE salesid = %s AND productid = %s",
+                                        (data["id"][0], data["id"][1]))
                             conn.commit()
 
-                            history_update(cur, conn, "salesproduct", data["id"], "salesid", "Delete", data["id"], "-")
+                            history_update(cur, conn, "salesproduct", data["id"], "salesid", "Delete", data["id"][0], "-")
                             history_update(cur, conn, "salesproduct", data["id"], "productid", "Delete", data["product_id"], "-")
                             history_update(cur, conn, "salesproduct", data["id"], "totalsales", "Delete", data["total_sales"], "-")
                             history_update(cur, conn, "salesproduct", data["id"], "totalcost", "Delete", data["total_cost"], "-")

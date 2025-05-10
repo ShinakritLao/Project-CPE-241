@@ -30,10 +30,13 @@ def history_update(cur, conn, table, loc, subloc, act, ori, upd):
     date = now_th.date()
     now = now_th.strftime("%H:%M:%S")
 
+    # Set multiple location
+    new_loc = ', '.join(loc) if isinstance(loc, tuple) else loc
+
     cur.execute("""
         INSERT INTO history_change (
             changeid, username, selected_table, location, sublocation, action,
             original_data, updated_data, date_change, time_change
         ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """, (new_change_id, username, table, loc, subloc, act, ori, upd, date, now))
+        """, (new_change_id, username, table, new_loc, subloc, act, ori, upd, date, now))
     conn.commit()

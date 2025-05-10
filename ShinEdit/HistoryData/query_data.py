@@ -8,7 +8,10 @@ def updatedata(cur, conn, table, loc, subloc, original_data, new_value):
     pri = get_primary(table)
 
     # SQL part: Update new value
-    cur.execute(f"UPDATE {table} SET {subloc} = %s WHERE {pri} = '{loc}'", (new_value,))
+    if table != 'salesproduct':
+        cur.execute(f"UPDATE {table} SET {subloc} = %s WHERE {pri} = '{loc}'", (new_value,))
+    else:
+        cur.execute(f"UPDATE SalesProduct SET {subloc} = %s WHERE SalesID = '{loc[0]}' AND ProductID = '{loc[1]}'", (new_value,))
     conn.commit()
 
     # Update history

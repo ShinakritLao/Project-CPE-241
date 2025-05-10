@@ -9,7 +9,7 @@ def get_primary(table):
 
     if table == 'kpi' : pri = table + "_id"
     elif table == 'users' : pri = "username"
-    elif table == 'salesproduct' : pri = "salesid"
+    elif table == 'salesproduct' : pri = ("salesid", "productid")
     else: pri = table + "id"
 
     return pri
@@ -20,7 +20,11 @@ def get_current_data(cur, table, loc, subloc):
     pri = get_primary(table)
 
     # SQL part: Get data from the table in database
-    cur.execute(f"SELECT {subloc} FROM {table} WHERE {pri} = %s", (loc,))
+    if table != 'salesproduct':
+        cur.execute(f"SELECT {subloc} FROM {table} WHERE {pri} = %s", (loc,))
+    else:
+        new_loc = tuple(map(str.strip, loc.split(',')))
+        cur.execute(f"SELECT {subloc} FROM {table} WHERE {pri[0]} = %s AND {pri[1]} = %s", (new_loc[0], new_loc[1]))
     result = cur.fetchone()
 
     return result[0]
@@ -35,7 +39,11 @@ def restore_update(cur, conn, table, loc, subloc, current_value, new_value, chan
     loc = str(loc)
 
     # SQL part: Update data from the table in database
-    cur.execute(f"UPDATE {table} SET {subloc} = %s WHERE {pri} = %s;", (new_value, loc))
+    if table != 'salesproduct':
+        cur.execute(f"UPDATE {table} SET {subloc} = %s WHERE {pri} = %s;", (new_value, loc))
+    else:
+        new_loc = tuple(map(str.strip, loc.split(',')))
+        cur.execute(f"UPDATE {table} SET {subloc} = %s WHERE {pri[0]} = %s AND {pri[1]} = %s;", (new_value, new_loc[0], new_loc[1]))
     conn.commit()
 
     # Save change in history table
