@@ -18,8 +18,11 @@ def KPI_CRUD(cur, conn, salesperson, all_data, display_data):
     col1, col2 = st.columns(2)
 
     with col1:
-        filopt = ["Default", "SalesPersonID", "Year"]
+        filopt = ["Default", "Sales Person ID", "Year"]
         filters = st.selectbox("Filter Search", filopt, index = 0)
+
+        if filters == 'Sales Person ID':
+            filters = "SalesPersonID"
 
     with col2:
         if filters == 'Default':

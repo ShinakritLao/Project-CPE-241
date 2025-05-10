@@ -2,16 +2,38 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
+from HistoryData.changehistory_update import history_update
+
 def createuser(conn, username, salespersonid, password, nickname, email):
     cur = conn.cursor()
     cur.execute("INSERT INTO users (username,salespersonid, password, nickname, email) VALUES (%s,%s, %s, %s, %s)",
         (username,salespersonid, password, nickname, email))
     conn.commit()
 
+    st.session_state.username = username
+    history_update(cur, conn, "users", username, "username", "Insert", "-", username)
+    history_update(cur, conn, "users", username, "salespersonid", "Insert", "-", salespersonid)
+    history_update(cur, conn, "users", username, "password", "Insert", "-", "Hidden")
+    history_update(cur, conn, "users", username, "nickname", "Insert", "-", nickname)
+    history_update(cur, conn, "users", username, "email", "Insert", "-", email)
+
 def reset_password(conn, username, new_password):
     cur = conn.cursor()
     cur.execute("UPDATE users SET password = %s WHERE username = %s", (new_password, username))
     conn.commit()
+    st.session_state.username = username
+    history_update(cur, conn, "users", username, "password", "Update", "Hidden", "Hidden")
+
+def get_user_role(position):
+    position = position.lower()
+    if "chief" in position:
+        return "Chief"
+    elif "manager" in position:
+        return "Manager"
+    elif "representative" in position:
+        return "Representative"
+    else:
+        return "Representative"  # fallback
 
 def login(users_data,salesperson_data, conn):
     if "logged_in" not in st.session_state:
@@ -34,12 +56,20 @@ def login(users_data,salesperson_data, conn):
                     if user_status.lower() == "banned":
                         st.error("Your account has been banned. Please contact the administrator.")
                     elif password == db_password:
+                        st.session_state.username = username
                         if user_status != "Active":
                             cur = conn.cursor()
                             cur.execute("UPDATE Users SET Status = %s WHERE Username = %s", ("Active", username))
+                            history_update(cur, conn, "users", username, "status", "Login", "Inactive", "Active")
                             conn.commit()
+                        # Get user position from salesperson data
+                        position = salesperson_data[salesperson_data["SalesPersonID"] ==
+                                                    users_data[users_data["Username"] == username][
+                                                        "SalesPersonID"].values[0]]["Position"].values[0]
+
+                        # Set user role in session
+                        st.session_state.role = get_user_role(position)
                         st.session_state.logged_in = True
-                        st.session_state.username = username
                         st.success("Login successful!")
                         st.rerun()
                     else:
@@ -100,8 +130,7 @@ def login(users_data,salesperson_data, conn):
                 with col2:
                     if st.button("✅ Confirm Register", use_container_width=True, key="confirm_register_btn"):
                         data = st.session_state["pending_register_data"]
-                        createuser(conn, data["username"], data["salesid"], data["password"], data["nickname"],
-                                    data["email"])
+                        createuser(conn, data["username"], data["salesid"], data["password"], data["nickname"],data["email"])
                         st.success("Account created successfully. You can now log in.")
                         st.session_state.register_mode = False
                         st.session_state.pop("pending_register_data", None)

@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 
 from GetData.salespersondata import get_salespersondata
+from GetData.salespersondata import get_one_salespersondata
+from DropdownInfo.filtersearch import get_details
 from HistoryData.query_data import updatedata
 from HistoryData.changehistory_update import history_update
 
@@ -13,7 +15,7 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
     col1, col2 = st.columns(2)
 
     with col1:
-        filopt = ["Default", "DOB", "Gender", "Position"]
+        filopt = ["Default", "Gender", "Position"]
         filters = st.selectbox("Filter Search", filopt, index=0, key='Filter_SalesPerson')
 
     with col2:
@@ -21,12 +23,9 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
             st.selectbox("Select Details", options=[], disabled=True, key='Details_SalesPerson')
             displaying = display_data
         else:
-            details = get_salespersondata(cur)  # You can add filtering logic here if needed
-            displaying = details
-            # looking for how to done it
-            # details = get_details(cur, 'SalesPerson', filters)
-            # selected_details = st.selectbox("Select Details", details, index=0, key="filter_details_salesperson")
-            # displaying = get_one_salespersondata(cur, filters, selected_details)
+             details = get_details(cur, 'SalesPerson', filters)
+             selected_details = st.selectbox("Select Details", details, index=0, key="filter_details_salesperson")
+             displaying = get_one_salespersondata(cur, filters, selected_details)
 
     # ------------------ DISPLAY DATA & SET UP ------------------
     st.dataframe(displaying)
@@ -109,7 +108,7 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
         with st.form("Update Sales Person Record"):
             sales_name = st.text_input("Sales Name", value=update_data['SalesName'].iloc[0])
             dob = st.date_input("Date of Birth", value=pd.to_datetime(update_data['DOB'].iloc[0]))
-            gender = st.selectbox("Gender", ["Male", "Female"], index=["Male", "Female"].index(update_data['Gender'].iloc[0]))
+            gender = st.selectbox("Gender", ["Male", "Female", "Other"], index=["Male", "Female", "Other"].index(update_data['Gender'].iloc[0]))
             position = st.text_input("Position", value=update_data['Position'].iloc[0])
             phone_number = st.text_input("Phone Number", value=update_data['PhoneNumber'].iloc[0])
             update_submitted = st.form_submit_button("Update Sales Person Record")
@@ -194,6 +193,11 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
                         conn.commit()
 
                         history_update(cur, conn, "salesperson", data["id"], "salespersonid", "Delete", data["id"], "-")
+                        history_update(cur, conn, "salesperson", data["id"], "sales_name", "Delete", data["sales_name"], "-")
+                        history_update(cur, conn, "salesperson", data["id"], "dob", "Delete", data["dob"], "-")
+                        history_update(cur, conn, "salesperson", data["id"], "gender", "Delete", data["gender"], "-")
+                        history_update(cur, conn, "salesperson", data["id"], "position", "Delete", data["position"], "-")
+                        history_update(cur, conn, "salesperson", data["id"], "phone_number", "Delete", data["phone_number"], "-")
 
                         st.success("✅ Record deleted successfully!")
                     except Exception as e:

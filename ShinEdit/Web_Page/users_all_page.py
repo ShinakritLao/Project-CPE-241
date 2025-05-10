@@ -4,12 +4,12 @@ import numpy as np
 
 from HistoryData.changehistory_update import history_update
 
-def users_all_page(cur, conn, users_data, display_users):
+def users_all_page(cur, conn, display_users):
 
     # ------------------ DELETE USER ------------------
     st.subheader("Delete User")
 
-    selected_data = st.selectbox("Select Username to Delete", users_data['Username'].tolist())
+    selected_data = st.selectbox("Select Username to Delete", display_users['Username'].tolist())
     current_data = display_users.loc[display_users['Username'] == selected_data]
     st.dataframe(current_data)
 
@@ -25,8 +25,8 @@ def users_all_page(cur, conn, users_data, display_users):
                 try:
                     cur.execute("DELETE FROM Users WHERE Username = %s", (st.session_state["delete_username"],))
                     conn.commit()
-                    history_update(cur, conn, "Users", st.session_state["delete_username"], "-", "Delete", "-", "-")
-                    conn.commit()
+                    history_update(cur, conn, "users", st.session_state["delete_username"], "-", "Delete", "-", "-")
+
                     st.warning("✅ User deleted successfully!")
                 except Exception as e:
                     st.error(f"❌ Delete failed: {e}")
@@ -71,8 +71,9 @@ def users_all_page(cur, conn, users_data, display_users):
                         cur.execute(f"UPDATE Users SET Status = %s WHERE Username = %s",
                                     (database_status, st.session_state[f"username_{idx}"]))
                         conn.commit()
-                        history_update(cur, conn, "Users", st.session_state[f"username_{idx}"], "-", button_status, "-", "-")
-                        conn.commit()
+                        history_update(cur, conn, "users", st.session_state[f"username_{idx}"], "status", button_status,
+                                       current_status, database_status)
+
                         st.warning(f"✅ User {button_status} successfully!")
                     except Exception as e:
                         st.error(f"❌ {button_status} failed: {e}")

@@ -9,6 +9,7 @@ def get_primary(table):
 
     if table == 'kpi' : pri = table + "_id"
     elif table == 'users' : pri = "username"
+    elif table == 'salesproduct' : pri = "salesid"
     else: pri = table + "id"
 
     return pri

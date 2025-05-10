@@ -19,8 +19,11 @@ def restoredata_CRUD(cur, conn, changehistory_data):
     col1, col2 = st.columns(2)
 
     with col1:
-        filopt = ["Default", "Username", "Selected_Table", "Action"]
+        filopt = ["Default", "Username", "Table", "Action"]
         filters = st.selectbox("Filter Search", filopt, index = 0)
+
+        if filters == 'Table':
+            filters = "Selected_Table"
 
     with col2:
         if filters == 'Default':
@@ -97,14 +100,16 @@ def restoredata_CRUD(cur, conn, changehistory_data):
 
                         if str(current_value) == str(data["ori_data"]):
                             st.warning("⚡ The original data is the same as the current value. No changes made.")
+                            st.stop()
                         else:
                             restore_update(cur, conn, data["table"], data["loc"], data["subloc"], current_value, data["ori_data"], data["changeid"])
+                            st.success("✅ Data restored successfully!")
 
                     # Delete restore
                     elif data['action'] == 'Delete':
                         restore_delete(cur, conn, data["table"], selected_restore)
-
                         st.success("✅ Data restored successfully!")
+
                 except Exception as e:
                     st.error(f"❌ Restore failed: {e}")
                     st.stop()

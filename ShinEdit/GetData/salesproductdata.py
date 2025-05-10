@@ -36,7 +36,7 @@ def get_one_salesproductdata(cur, loc, subloc, loc2, subloc2):
     cur.execute(f"""
                 SELECT SalesID, Product.ProductID, ProductName, TotalSales, TotalCost, SalesProduct.Status FROM SalesProduct
                 JOIN Product ON SalesProduct.ProductID = Product.ProductID WHERE SalesProduct.{loc} = '{subloc}' 
-                AND SalesProduct.{loc2} = '{subloc2} ORDER BY SalesID, Product.ProductID
+                AND SalesProduct.{loc2} = '{subloc2}' ORDER BY SalesID, Product.ProductID;
                 """)
     display_sql = cur.fetchall()
 
