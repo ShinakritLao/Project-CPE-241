@@ -26,7 +26,7 @@ def history_update(cur, conn, table, loc, subloc, act, ori, upd):
     # Get username
     username = get_username()
 
-    # Current date & time
+    # Current date & time (Thailand)
     tz_th = pytz.timezone("Asia/Bangkok")
     date = datetime.now(tz_th).date()
     now = (datetime.now(tz_th)).strftime("%H:%M:%S")
