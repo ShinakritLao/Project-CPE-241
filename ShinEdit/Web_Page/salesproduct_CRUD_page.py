@@ -51,7 +51,7 @@ def SalesProduct_CRUD(cur, conn, salesperson, all_data, display_data):
             product_id = st.selectbox("Product ID", salesperson)
             total_sales = st.number_input("Total Sales", min_value=0)
             total_cost = st.number_input("Total Cost", min_value=0)
-            status = st.selectbox("Status", ["cancelled", "completed", "pending"])
+            status = st.selectbox("Status", ["Cancelled", "Completed", "Pending"])
             submitted = st.form_submit_button("Add Sales Product")
 
             if submitted:
@@ -119,8 +119,8 @@ def SalesProduct_CRUD(cur, conn, salesperson, all_data, display_data):
                 product_id = st.selectbox("Product ID", salesperson, index=salesperson.index(product_id))
                 total_sales = st.number_input("Total Sales", value=update_data['Total Sales'][0])
                 total_cost = st.number_input("Total Cost", value=update_data['Total Cost'][0])
-                status = st.selectbox("Status", ["cancelled", "pending", "completed"],
-                                      index=["cancelled", "pending", "completed"].index(update_data['Status'][0]))
+                status = st.selectbox("Status", ["Cancelled", "Pending", "Completed"],
+                                      index=["Cancelled", "Pending", "Completed"].index(update_data['Status'][0]))
 
                 update_submitted = st.form_submit_button("Update Sales Product Record")
 
