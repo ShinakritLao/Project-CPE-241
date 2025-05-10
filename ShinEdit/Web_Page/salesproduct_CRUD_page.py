@@ -9,7 +9,7 @@ from HistoryData.changehistory_update import history_update
 from DropdownInfo.salesproduct import get_salesproduct_pd
 from DropdownInfo.salesproduct import get_salesproduct_s
 
-def SalesProduct_CRUD(cur, conn, salesperson, all_data, display_data):
+def SalesProduct_CRUD(cur, conn, product, all_data, display_data):
     st.header("Sales Product Record")
 
     # ------------------ FILTER SEARCH ------------------
@@ -48,7 +48,7 @@ def SalesProduct_CRUD(cur, conn, salesperson, all_data, display_data):
 
         with st.form("Add Sales Product Record"):
             new_id = st.text_input("Sales ID", value=new_value)
-            product_id = st.selectbox("Product ID", salesperson)
+            product_id = st.selectbox("Product ID", product)
             total_sales = st.number_input("Total Sales", min_value=0)
             total_cost = st.number_input("Total Cost", min_value=0)
             status = st.selectbox("Status", ["Cancelled", "Completed", "Pending"])
@@ -113,10 +113,10 @@ def SalesProduct_CRUD(cur, conn, salesperson, all_data, display_data):
             with st.form("Update Sales Product Record"):
                 product_id = update_data['Product ID'][0]
 
-                if product_id not in salesperson:
-                    product_id = salesperson[0]
+                if product_id not in product:
+                    product_id = product[0]
 
-                product_id = st.selectbox("Product ID", salesperson, index=salesperson.index(product_id))
+                product_id = st.selectbox("Product ID", product, index=product.index(product_id))
                 total_sales = st.number_input("Total Sales", value=update_data['Total Sales'][0])
                 total_cost = st.number_input("Total Cost", value=update_data['Total Cost'][0])
                 status = st.selectbox("Status", ["Cancelled", "Pending", "Completed"],
