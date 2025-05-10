@@ -1,4 +1,5 @@
 from datetime import datetime
+import pytz
 from GetData.changehistorydata import get_changehistorydata
 
 def history_update(cur, conn, table, loc, subloc, act, ori, upd):
@@ -26,8 +27,9 @@ def history_update(cur, conn, table, loc, subloc, act, ori, upd):
     username = get_username()
 
     # Current date & time
-    date = datetime.today()
-    now = (datetime.now()).strftime("%H:%M:%S")
+    tz_th = pytz.timezone("Asia/Bangkok")
+    date = datetime.now(tz_th).date()
+    now = (datetime.now(tz_th)).strftime("%H:%M:%S")
 
     # Execute SQL query
     cur.execute("""

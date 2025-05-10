@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+from datetime import datetime as date
 
 from GetData.debtordata import get_one_debtordata
 from DropdownInfo.filtersearch import get_details
@@ -54,7 +55,7 @@ def Debtor_CRUD(cur, conn, salesperson, product_list, all_data, display_data):
             new_price = st.number_input("Price", min_value = 0.0)
             new_debt = st.number_input("Debt", min_value = 0.0)
             new_paid = st.number_input("Paid", min_value = 0.0)
-            new_date = st.date_input("Date")
+            new_date = st.date_input("Date", min_value = date(2022, 1, 1), max_value = date.now().date())
             new_status = st.selectbox("Status", ["Paid", "Unpaid", "Partially Paid"])
 
             submitted = st.form_submit_button("Add Debtor")
@@ -123,7 +124,7 @@ def Debtor_CRUD(cur, conn, salesperson, product_list, all_data, display_data):
             update_price = st.number_input("Price", value=update_data['Price'][0], min_value = 0)
             update_debt = st.number_input("Debt", value=update_data['Debt'][0], min_value=0)
             update_paid = st.number_input("Paid", value=update_data['Paid'][0], min_value=0)
-            update_date = st.date_input("Date", value=update_data['Date'][0])
+            update_date = st.date_input("Date", value=update_data['Date'][0], min_value = date(1970, 1, 1), max_value = date.now().date())
             update_status = st.selectbox("Status", ["Paid", "Unpaid", "Partially Paid"], index=["Paid", "Unpaid", "Partially Paid"].index(update_data['Status'][0]))
 
             update_submitted = st.form_submit_button("Update Record")

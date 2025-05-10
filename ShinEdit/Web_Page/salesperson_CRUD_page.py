@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+from datetime import date
 
 from GetData.salespersondata import get_salespersondata
 from GetData.salespersondata import get_one_salespersondata
@@ -47,7 +48,7 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
         with st.form("Add Sales Person Record"):
             new_id = st.text_input("Sales Person ID", value=new_value, disabled=True)
             sales_name = st.text_input("Sales Name")
-            dob = st.date_input("Date of Birth")
+            dob = st.date_input("Date of Birth", min_value = date(1970, 1, 1), max_value = date(2005, 12, 31))
             gender = st.selectbox("Gender", ["Male", "Female", "Other"])
             position = st.text_input("Position")
             phone_number = st.text_input("Phone Number")
@@ -107,7 +108,8 @@ def SalesPerson_CRUD(cur, conn, all_data, display_data):
 
         with st.form("Update Sales Person Record"):
             sales_name = st.text_input("Sales Name", value=update_data['SalesName'].iloc[0])
-            dob = st.date_input("Date of Birth", value=pd.to_datetime(update_data['DOB'].iloc[0]))
+            dob = st.date_input("Date of Birth", value=pd.to_datetime(update_data['DOB'].iloc[0]),
+                                min_value = date(1970, 1, 1), max_value = date(2005, 12, 31))
             gender = st.selectbox("Gender", ["Male", "Female", "Other"], index=["Male", "Female", "Other"].index(update_data['Gender'].iloc[0]))
             position = st.text_input("Position", value=update_data['Position'].iloc[0])
             phone_number = st.text_input("Phone Number", value=update_data['PhoneNumber'].iloc[0])
