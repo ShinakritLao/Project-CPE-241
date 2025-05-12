@@ -20,7 +20,7 @@ def get_display_users(cur):
             """)
     display_sql = cur.fetchall()
 
-    # Convert the result to a pandas DataFrame
+    # Convert the results to a pandas DataFrame
     display_data = pd.DataFrame(display_sql, columns = ['Username', 'Sales Person ID', 'Sales Name',
                                                         'Nickname', 'Email', 'Status'])
 
