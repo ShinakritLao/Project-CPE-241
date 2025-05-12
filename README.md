@@ -1,7 +1,7 @@
 # Deployed Website
     https://visionboard241.streamlit.app/
 # How to run the PyCharm
-Click here to download [PyCharm](https://dawmfltwbrcjmlgmjoak.supabase.co)
+Click here to download [PyCharm](https://www.jetbrains.com/pycharm/download/?section=windows)
 1. Open terminal in PyCharm
 2. Install streamlit
 3. cd ShinEdit > streamlit run main.py
