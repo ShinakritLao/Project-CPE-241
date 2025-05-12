@@ -28,7 +28,7 @@ def get_display_users(cur):
 
 def get_one_usersdata(cur, loc, subloc):
 
-    # SQL part: Get data from the table in database
+    # SQL part: Get data from the table in the database system
     cur.execute(f"""
                 SELECT Username, SalesPerson.SalesPersonID, SalesName, Nickname, Email FROM Users
                 JOIN SalesPerson ON Users.SalesPersonID = SalesPerson.SalesPersonID WHERE Users.{loc} = '{subloc}' 
