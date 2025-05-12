@@ -15,14 +15,14 @@ def get_display_users(cur):
 
     # SQL part: Get data from the table in database
     cur.execute("""
-            SELECT Username, SalesPerson.SalesPersonID, SalesName, Nickname, Email FROM Users
+            SELECT Username, SalesPerson.SalesPersonID, SalesName, Nickname, Email, Status FROM Users
             JOIN SalesPerson ON Users.SalesPersonID = SalesPerson.SalesPersonID ORDER BY SalesPerson.SalesPersonID;
             """)
     display_sql = cur.fetchall()
 
     # Convert the result to a pandas DataFrame
     display_data = pd.DataFrame(display_sql, columns = ['Username', 'Sales Person ID', 'Sales Name',
-                                                        'Nickname', 'Email'])
+                                                        'Nickname', 'Email', 'Status'])
 
     return display_data
 
