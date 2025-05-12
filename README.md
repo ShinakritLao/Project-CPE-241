@@ -19,7 +19,7 @@
   #### Password
     Azerty*789
 ## 3. Representative
-  ### 3.1 Chonlaway's account
+  ### 3.1 Chonlawat's account
   #### Username
     iamjr
   #### Password
